@@ -4,14 +4,13 @@
 
 class Ball : public PhysicsObject
 {
-    sf::Color color;
-	float radius;
 
 public:
-    Gravity gravity;
-
+    float radius;
+    sf::Color color;
+    sf::Vector2f midpoint;
     Ball(float xPosition, float yPosition, float radius, sf::Color color, bool gravityOn);
-    
     void draw(sf::RenderWindow& window );
+    void update(float deltaTime) override;
 };
 

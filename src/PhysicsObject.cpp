@@ -9,10 +9,13 @@ PhysicsObject::PhysicsObject(float xPosition, float yPosition, bool gravityOn)
 void PhysicsObject::update(float deltaTime) {
 	if (gravityOn)
 	{
-		yPosition = gravity.applyGravity(yPosition, deltaTime);
+		velocity = gravity.applyGravity(yPosition, deltaTime, velocity);
+		if (yPosition >= 825)
+		{
+			yPosition = 825;
+			velocity = -velocity * .8f;
+		}
+		yPosition += velocity * deltaTime *100;
 	}
-	
-	
-
 }
 

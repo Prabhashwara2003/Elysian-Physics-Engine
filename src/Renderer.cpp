@@ -5,7 +5,7 @@ Renderer::Renderer(sf::RenderWindow& window)
 {
 }
 
-void Renderer::drawArena()
+void Renderer::drawBackground()
 {
 	sf::RectangleShape shape({ 1750.f, 850.f });
 	shape.setFillColor(sf::Color(0, 0, 0));   // Gray

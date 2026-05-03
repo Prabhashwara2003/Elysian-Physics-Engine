@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\Rectangle.cpp" />
     <ClCompile Include="src\Ball.cpp" />
     <ClCompile Include="src\PhysicsObject.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Collision.h" />
     <ClInclude Include="src\Rectangle.h" />
     <ClInclude Include="src\Ball.h" />
     <ClInclude Include="src\PhysicsObject.h" />

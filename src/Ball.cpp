@@ -13,3 +13,18 @@ void Ball::draw(sf::RenderWindow& window )
 	shape.setPosition({ xPosition , yPosition});
 	window.draw(shape);
 }
+
+void Ball::update(float deltaTime) {
+	if (gravityOn)
+	{
+		velocity = gravity.applyGravity(yPosition, deltaTime, velocity);
+		if (yPosition >= 825)
+		{
+			yPosition = 825;
+			velocity = -velocity * .8f;
+		}
+		yPosition += velocity * deltaTime * 100;
+	}
+
+	midpoint = { xPosition + radius , yPosition + radius };
+}
