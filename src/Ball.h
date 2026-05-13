@@ -10,6 +10,7 @@ public:
     sf::Color color;
     sf::Vector2f midpoint;
 	float mass = 1.f;
+
     Ball(sf::Vector2f position, float radius, sf::Color color, bool gravityOn);
     void draw(sf::RenderWindow& window );
     void update(float deltaTime) override;

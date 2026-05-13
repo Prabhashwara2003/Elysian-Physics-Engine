@@ -11,6 +11,7 @@ void Renderer::drawBackground()
 	shape.setFillColor(sf::Color(0, 0, 0));   // Gray
 	shape.setPosition({ 25, 25 });
 	window.draw(shape);
+
 }
 
 void Renderer::renderPhysicsObject(PhysicsObject& physicsObject)

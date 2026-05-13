@@ -9,7 +9,7 @@ class PhysicsObject
 public:
 	sf::Vector2f position;
 	Gravity gravity;
-	sf::Vector2f velocity = sf::Vector2f(0, 0);
+	sf::Vector2f velocity = sf::Vector2f( 0, 0);
 
 	bool gravityOn;
 

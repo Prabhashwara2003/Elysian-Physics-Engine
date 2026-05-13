@@ -11,6 +11,7 @@ void Ball::draw(sf::RenderWindow& window )
 	sf::CircleShape shape(radius);
 	shape.setFillColor(color);
 	shape.setPosition(position);
+	shape.setPointCount(100);
 	window.draw(shape);
 }
 
@@ -33,9 +34,10 @@ void Ball::update(float deltaTime) {
 			position.x = 25;
 			velocity.x = -velocity.x * .8f;
 		}
-		position.y += velocity.y * deltaTime * 100;
-		position.x += velocity.x * deltaTime * 100;
+		//position.y += velocity.y * deltaTime * 100;
+		//position.x += velocity.x * deltaTime * 100;
 	}
-
+	position.y += velocity.y * deltaTime * 100;
+	position.x += velocity.x * deltaTime * 100;
 	midpoint = { position.x + radius , position.y + radius };
 }
