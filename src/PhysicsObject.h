@@ -1,19 +1,20 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Gravity.h"
+#include "vectors.h"
 
 class PhysicsObject
 {
 	
 
 public:
-	sf::Vector2f position;
+	vec2 position;
 	Gravity gravity;
-	sf::Vector2f velocity = sf::Vector2f( 0, 0);
+	vec2 velocity = { 0, 0 };
 
 	bool gravityOn;
 
-	PhysicsObject(sf::Vector2f position , bool gravityOn );
+	PhysicsObject(vec2 position , bool gravityOn );
 
 	virtual void update(float deltaTime);
 

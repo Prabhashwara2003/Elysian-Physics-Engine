@@ -1,6 +1,6 @@
 #include "PhysicsObject.h"
 
-PhysicsObject::PhysicsObject(sf::Vector2f position, bool gravityOn)
+PhysicsObject::PhysicsObject(vec2 position, bool gravityOn)
 	: position(position), gravityOn(gravityOn)
 {
 	
