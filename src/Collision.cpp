@@ -88,57 +88,67 @@ void Collision::checkCollision(std::vector<Ball*>& balls)
     }
 }
 
-void Collision::checkBallRect(Ball* ball, Rectangle* rect)
+void Collision::checkBallRect(std::vector<Ball*>& balls, std::vector<Rectangle*>& rectangles)
 {
-    // 1. Find the closest point on the rect to the ball center
-    float closestX = std::max(rect->position.x,
-        std::min(ball->midpoint.x, rect->position.x + rect->width));
-    float closestY = std::max(rect->position.y,
-        std::min(ball->midpoint.y, rect->position.y + rect->height));
-
-    // 2. Vector from closest point to ball center
-    sf::Vector2f delta = ball->midpoint - sf::Vector2f(closestX, closestY);
-    float distSq = delta.x * delta.x + delta.y * delta.y;
-
-    if (distSq >= ball->radius * ball->radius)
-        return; // No collision
-
-    float distance = std::sqrt(distSq);
-    sf::Vector2f normal;
-
-    // 3. Special case: ball center is INSIDE the rectangle
-    if (distance == 0.0f)
+    for (Ball* ball : balls)
     {
-        // Find the nearest edge and use that as the push-out direction
-        float distLeft = ball->midpoint.x - rect->position.x;
-        float distRight = (rect->position.x + rect->width) - ball->midpoint.x;
-        float distTop = ball->midpoint.y - rect->position.y;
-        float distBottom = (rect->position.y + rect->height) - ball->midpoint.y;
+        for (Rectangle* rect : rectangles)
+        {
+            // 1. Find the closest point on the rect to the ball center
+            float closestX = std::max(rect->position.x,
+                std::min(ball->midpoint.x, rect->position.x + rect->width));
+            float closestY = std::max(rect->position.y,
+                std::min(ball->midpoint.y, rect->position.y + rect->height));
 
-        float minDist = std::min({ distLeft, distRight, distTop, distBottom });
+            // 2. Vector from closest point to ball center
+            sf::Vector2f delta = ball->midpoint - sf::Vector2f(closestX, closestY);
+            float distSq = delta.x * delta.x + delta.y * delta.y;
 
-        if (minDist == distLeft)   normal = { -1.f,  0.f };
-        else if (minDist == distRight)  normal = { 1.f,  0.f };
-        else if (minDist == distTop)    normal = { 0.f, -1.f };
-        else                            normal = { 0.f,  1.f };
+            if (distSq >= ball->radius * ball->radius)
+                continue; // No collision
 
-        distance = minDist; // penetration depth
+            float distance = std::sqrt(distSq);
+            sf::Vector2f normal;
+
+            // 3. Special case: ball center is INSIDE the rectangle
+            if (distance == 0.0f)
+            {
+                // Find the nearest edge and use that as the push-out direction
+                float distLeft = ball->midpoint.x - rect->position.x;
+                float distRight = (rect->position.x + rect->width) - ball->midpoint.x;
+                float distTop = ball->midpoint.y - rect->position.y;
+                float distBottom = (rect->position.y + rect->height) - ball->midpoint.y;
+
+                float minDist = std::min({ distLeft, distRight, distTop, distBottom });
+
+                if (minDist == distLeft)   normal = { -1.f,  0.f };
+                else if (minDist == distRight)  normal = { 1.f,  0.f };
+                else if (minDist == distTop)    normal = { 0.f, -1.f };
+                else                            normal = { 0.f,  1.f };
+
+                distance = minDist; // penetration depth
+            }
+            else
+            {
+                normal = delta / distance; // normalized push direction
+            }
+
+            // 4. Positional correction — push ball out of rect
+            float penetration = ball->radius - distance;
+            ball->position += normal * penetration;
+
+            // 5. Reflect velocity along the collision normal (with restitution)
+            float velAlongNormal = ball->velocity.x * normal.x + ball->velocity.y * normal.y;
+
+            if (velAlongNormal < 0.f) // only resolve if moving toward rect
+            {
+                float restitution = 0.8f;
+                ball->velocity -= (1.f + restitution) * velAlongNormal * normal;
+            }
+        }
     }
-    else
-    {
-        normal = delta / distance; // normalized push direction
-    }
+}
 
-    // 4. Positional correction — push ball out of rect
-    float penetration = ball->radius - distance;
-    ball->position += normal * penetration;
+void Collision::checkRectRect(std::vector<Rectangle*>& rectangles) {
 
-    // 5. Reflect velocity along the collision normal (with restitution)
-    float velAlongNormal = ball->velocity.x * normal.x + ball->velocity.y * normal.y;
-
-    if (velAlongNormal < 0.f) // only resolve if moving toward rect
-    {
-        float restitution = 0.8f;
-        ball->velocity -= (1.f + restitution) * velAlongNormal * normal;
-    }
 }
