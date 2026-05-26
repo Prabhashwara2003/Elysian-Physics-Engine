@@ -147,6 +147,7 @@
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\vectors.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Collision.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="src\Gravity.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Application.h" />
+    <ClInclude Include="src\vectors.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -17,6 +17,7 @@ typedef struct vec2 {
 	
 };
 
+//for future implements
 typedef struct vec3 {
 	union {
 		struct {
