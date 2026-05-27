@@ -1,5 +1,5 @@
 #include "Collision.h"
-
+/*
 void Collision::checkCollision(std::vector<Ball*>& balls)
 {
     for (int i = 0; i < balls.size(); i++)
@@ -151,4 +151,4 @@ void Collision::checkBallRect(std::vector<Ball*>& balls, std::vector<Rectangle*>
 
 void Collision::checkRectRect(std::vector<Rectangle*>& rectangles) {
 
-}
+}*/

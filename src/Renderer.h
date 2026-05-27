@@ -1,19 +1,12 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "PhysicsObject.h"
-#include "Ball.h"
+#include "Circle.h"
+#include "matrices.h";
 
-class Renderer
-{
-private:
-
-	sf::RenderWindow& window;
-
-public:
-
-	Renderer(sf::RenderWindow& window);
 	
-	//void drawCircle( float deltaTime);
-	void drawBackground();
-	void renderPhysicsObject(PhysicsObject& physicsObject);
-};	
+//void drawCircle( float deltaTime);
+sf::Transform convertToSFMLTransform(const mat3& matrix);
+void drawBackground(sf::RenderWindow& window);
+void drawObjects(sf::RenderWindow& window,Circle c);
+
+	

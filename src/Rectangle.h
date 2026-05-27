@@ -1,5 +1,6 @@
 #pragma once
 #include "PhysicsObject.h"
+/*
 class Rectangle : public PhysicsObject
 	 
 {
@@ -17,3 +18,4 @@ public:
 	void update(float deltaTime) override;
 };
 
+*/

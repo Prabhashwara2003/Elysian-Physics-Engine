@@ -81,4 +81,8 @@ bool Multiply(float* out, const float* matA, int aRow, int aCol, const float* ma
 mat2 operator* (const mat2& matA, const mat2& matB);
 mat3 operator* (const mat3& matA, const mat3& matB);
 
+mat3 createTranslation(vec2 position);
+mat3 createRotation(float angle);
+mat3 createScale(vec2 scalev);
+
 #endif // _H_MATH_MATRICES_

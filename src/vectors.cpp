@@ -52,7 +52,7 @@ float Distance(const vec2& l, const vec2& r) {
 	return Magnitude(t);
 }
 
-vec2 Normalize(vec2& v) {
+void Normalize(vec2& v) {
 	v =  v * (1.0f / Magnitude(v));
 };
 

@@ -54,7 +54,7 @@ bool Multiply(float* out, const float* matA, int aRow, int aCol, const float* ma
 		return false;
 	}
 	for (int i = 0; i < aRow; ++i) {
-		for (int j = 0; i < bCol; ++j) {
+		for (int j = 0; j < bCol; ++j) {
 			out[bCol * i + j] = 0.0f;
 			for (int k = 0; k < bRow; ++k) {
 				int a = aCol * i + k;
@@ -77,3 +77,19 @@ mat3 operator* (const mat3& matA, const mat3& matB) {
 	Multiply(temp.asArray, matA.asArray, 3, 3, matB.asArray, 3, 3);
 	return temp;
 }
+
+mat3 createTranslation(vec2 position) {
+	mat3 translation(1,0,position.x,0,1,position.y,0,0,1);
+	return translation;
+}
+
+mat3 createRotation(float angle) {
+	mat3 rotation(cos(angle), -sin(angle), 0, sin(angle), cos(angle), 0, 0, 0, 1);
+	return rotation;
+}
+
+mat3 createScale(vec2 scalev) {
+	mat3 scale(scalev.x, 0, 0, 0, scalev.y, 0, 0, 0, 1);
+	return scale;
+}
+

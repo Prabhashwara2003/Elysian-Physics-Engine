@@ -44,7 +44,7 @@ float Dot (const vec2& l, const vec2& r);
 float Magnitude (const vec2& v);
 float Magnitudesqr(const vec2& v);
 float Distance(const vec2& l, const vec2& r);
-vec2 Normalize( vec2& v);
+void Normalize( vec2& v);
 vec2 Normalized(const vec2& v);
 float Angle(const vec2& l, const vec2& r);
 vec2 Projection(const vec2& v, const vec2& direction);

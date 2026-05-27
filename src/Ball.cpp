@@ -1,5 +1,5 @@
 #include "Ball.h"
-
+/*
 Ball::Ball(sf::Vector2f position, float radius, sf::Color color, bool gravityOn)
 	:PhysicsObject(position ,gravityOn), radius(radius), color(color)
 {	
@@ -24,4 +24,4 @@ void Ball::update(float deltaTime) {
 	position.y += velocity.y * deltaTime * 100;
 	position.x += velocity.x * deltaTime * 100;
 	midpoint = { position.x + radius , position.y + radius };
-}
+}*/

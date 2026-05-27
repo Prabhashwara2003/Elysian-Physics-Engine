@@ -1,12 +1,11 @@
 #include "PhysicsObject.h"
-
-PhysicsObject::PhysicsObject(vec2 position, bool gravityOn)
-	: position(position), gravityOn(gravityOn)
+/*
+PhysicsObject::PhysicsObject(vec2 origin, bool gravityOn)
+	: origin(origin), gravityOn(gravityOn)
 {
 	
-}
-
-void PhysicsObject::update(float deltaTime) {
+}*/
+/*void PhysicsObject::update(float deltaTime) {
 	if (gravityOn)
 	{
 		velocity = gravity.applyGravity(position.y, deltaTime, velocity);
@@ -22,5 +21,6 @@ void PhysicsObject::update(float deltaTime) {
 		
 	}
 
-}
+}*/
+
 

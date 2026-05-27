@@ -1,5 +1,5 @@
 #include "Rectangle.h"
-
+/*
 Rectangle::Rectangle(sf::Vector2f position, float height, float width, sf::Color color, bool gravityOn)
 	:PhysicsObject(position, gravityOn), height(height), width(width), color(color)
 {
@@ -23,4 +23,4 @@ void Rectangle::update(float deltaTime)
 		position.x += velocity.x * deltaTime * 100;
 	}
 	midpoint = { position.x + width / 2.f , position.y + height / 2.f };
-}
+}*/
