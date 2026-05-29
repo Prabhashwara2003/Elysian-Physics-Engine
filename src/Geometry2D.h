@@ -1,0 +1,74 @@
+#pragma once
+#ifndef _H_2D_GEOMETRY_
+#define _H_2D_GEOMETRY_
+
+#include "vectors.h"
+
+typedef vec2 Point2D;
+
+typedef struct Line2D {
+	Point2D Start;
+	Point2D End;
+
+	inline Line2D() {};
+	inline Line2D(const Point2D& start, const Point2D& End)
+		:Start(Start),End(End)
+	{
+
+	}
+};
+
+typedef struct Circle {
+	Point2D Position;
+	float radius;
+
+	inline Circle() : radius(1.0) {};
+	inline Circle(const Point2D& Position, const float& radius) 
+		:Position(Position),radius(radius)
+	{}
+};
+
+typedef struct Rectangle2D {
+	Point2D origin;
+	vec2 size;
+
+	inline Rectangle2D(): size(1.0f,1.0f){}
+	inline Rectangle2D(const Point2D& position, const vec2& size)
+		: origin(position), size(size)
+	{};
+};
+
+typedef struct OrientedRectangle {
+	Point2D position;
+	vec2 halfExtents;
+	float rotation;
+
+	inline OrientedRectangle() : halfExtents(1.0f, 1.0f){}
+	inline OrientedRectangle(const Point2D& position ,const vec2& halfExtents)
+		:position(position),halfExtents(halfExtents)
+	{ }
+	inline OrientedRectangle(const Point2D& position, const vec2& halfExtents ,const float& rotation)
+		:position(position),halfExtents(halfExtents),rotation(rotation)
+	{ }
+};
+
+float Length(const Line2D& Line);
+float LengthSqr(const Line2D& Line);
+
+vec2 GetMin(const Rectangle2D& rectangle);
+vec2 GetMax(const Rectangle2D& rectangle);
+Rectangle2D FromMinMax(const vec2& min, const vec2& max);
+
+bool PointInLine(const Point2D& Point, const Line2D& line);
+bool PointInCircle(const Point2D& Point, const Circle& circle);
+bool pointInRectangle(const Point2D& point, const Rectangle2D& rectangle);
+bool pointInOrientedRectangle(const Point2D point, const OrientedRectangle& rectangle);
+
+bool LineCircle(const Line2D& line, const Circle& circle);
+bool LineRectangle(const Line2D& line, const Rectangle2D& rectangle);
+bool LineOrintedRectangle(const Line2D& line, const OrientedRectangle& rectangle);
+
+bool CircleCircle(const Circle& c1, const Circle& c2);
+
+#endif _H_2D_GEOMETRY_
+

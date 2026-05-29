@@ -51,4 +51,6 @@ vec2 Projection(const vec2& v, const vec2& direction);
 vec2 Perpendicular(const vec2& v, const vec2& direction);
 vec2 Reflection(const vec2& v, const vec2& direction);
 
+
+
 #endif // !_H_MATH_VECTORS_
