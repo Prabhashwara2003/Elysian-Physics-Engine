@@ -25,3 +25,4 @@ void drawObjects(sf::RenderWindow& window,Circle c) {
 	window.draw(shape, Transform);
 }
 
+

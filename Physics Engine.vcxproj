@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="src\Circle.cpp" />
     <ClCompile Include="src\Collision.cpp" />
+    <ClCompile Include="src\Geometry2D.cpp" />
     <ClCompile Include="src\matrices.cpp" />
     <ClCompile Include="src\Rectangle.cpp" />
     <ClCompile Include="src\Ball.cpp" />
@@ -154,6 +155,7 @@
   <ItemGroup>
     <ClInclude Include="src\Circle.h" />
     <ClInclude Include="src\Collision.h" />
+    <ClInclude Include="src\Geometry2D.h" />
     <ClInclude Include="src\matrices.h" />
     <ClInclude Include="src\Rectangle.h" />
     <ClInclude Include="src\Ball.h" />

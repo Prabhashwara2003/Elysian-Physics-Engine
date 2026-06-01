@@ -52,6 +52,11 @@ typedef struct OrientedRectangle {
 	{ }
 };
 
+typedef struct Interval2D {
+	float min;
+	float max;
+};
+
 float Length(const Line2D& Line);
 float LengthSqr(const Line2D& Line);
 
@@ -69,6 +74,12 @@ bool LineRectangle(const Line2D& line, const Rectangle2D& rectangle);
 bool LineOrintedRectangle(const Line2D& line, const OrientedRectangle& rectangle);
 
 bool CircleCircle(const Circle& c1, const Circle& c2);
+bool CircleRectangle(const Circle& circle, const Rectangle2D& rectangle);
+bool CircleOrientedRectangle(const Circle& circle, const OrientedRectangle& rectangle);
+
+Interval2D GetInterval(const Rectangle2D& rect, const vec2& axis);
+bool OverLapOnAxis(const Rectangle2D& rect1, const Rectangle2D& rect2, const vec2 axis);
+bool RectangleRectangleSaT(const Rectangle2D& rect1, const Rectangle2D& rect2);
 
 #endif _H_2D_GEOMETRY_
 
