@@ -198,4 +198,98 @@ bool RectangleRectangleSaT(const Rectangle2D& rect1, const Rectangle2D& rect2) {
 	return true;
 }
 
+Interval2D GetInterval(const OrientedRectangle& rectangle, const vec2& axis) {
+
+	Rectangle2D temp(Point2D(rectangle.position - rectangle.halfExtents), rectangle.halfExtents * 2.0f);
+
+	Interval2D result;
+	vec2 min = GetMin(temp);
+	vec2 max = GetMax(temp);
+
+	vec2 verts[] = { vec2(min.x,min.y),vec2(min.x,max.y),vec2(max.x,max.y),vec2(max.x,min.y) };
+
+	float theta = DEG2RAD(rectangle.rotation);
+
+	float zRotation[] = { cosf(theta),sinf(theta),-sinf(theta),cosf(theta) };
+
+	for (int i = 0; i < 4; i++) {
+		vec2 r = verts[i] - rectangle.position;
+		Multiply(r.asArray, zRotation, 2, 2, verts[i].asArray, 2, 1);
+
+		verts[i] = r + rectangle.position;
+	}
+	
+	result.min = result.max = Dot(axis, verts[0]);
+	for (int i = 1; i < 4; i++) {
+		float projection = Dot(axis, verts[i]);
+		if (projection < result.min) {
+			result.min = projection;
+		}
+		if (projection > result.max) {
+			result.max = projection;
+		}
+	}
+	return result;
+}
+bool OverLapOnAxis(const Rectangle2D& rect1, const OrientedRectangle& rect2,const vec2& axis) {
+	Interval2D a = GetInterval(rect1, axis);
+	Interval2D b = GetInterval(rect2, axis);
+	return((b.min <= a.max) && (a.min <= b.max));
+}
+bool RectagleOrientedRectangle(const Rectangle2D& rect1, const OrientedRectangle rect2) {
+	vec2 axisToTest[] = { vec2(1,0),vec2(0,1),vec2(),vec2() };
+
+	float theta = DEG2RAD(rect2.rotation);
+
+	float zRotaion[] = { cosf(theta),sinf(theta),-sinf(theta),cosf(theta) };
+
+	vec2 axis = Normalized(vec2(rect2.halfExtents.x, 0));
+	Multiply(axisToTest[2].asArray, axis.asArray, 1, 2, zRotaion, 2, 2);
+
+	axis = Normalized(vec2(0, rect2.halfExtents.y));
+	Multiply(axisToTest[3].asArray, axis.asArray, 1, 2, zRotaion, 2, 2);
+
+	for (int i = 0; i < 4; i++) {
+		if (!OverLapOnAxis(rect1, rect2, axisToTest[i])) {
+			return false;
+		}
+	}
+	return true;
+
+}
+
+bool OverLapOnAxis(const OrientedRectangle& rect1, const OrientedRectangle& rect2, const vec2& axis) {
+	Interval2D a = GetInterval(rect1, axis);
+	Interval2D b = GetInterval(rect2, axis);
+	return((b.min <= a.max) && (a.min <= b.max));
+}
+bool RectagleOrientedRectangle(const OrientedRectangle& rect1, const OrientedRectangle& rect2) {
+	vec2 axisToTest[] = { vec2(),vec2(),vec2(),vec2() };
+	
+	float theta1 = DEG2RAD(rect1.rotation);
+	float theta2 = DEG2RAD(rect2.rotation);
+
+	float zRotaion1[] = { cosf(theta1),sinf(theta1),-sinf(theta1),cosf(theta1) };
+	float zRotaion2[] = { cosf(theta2),sinf(theta2),-sinf(theta2),cosf(theta2) };
+
+	vec2 axis = Normalized(vec2(rect1.halfExtents.x, 0));
+	Multiply(axisToTest[0].asArray, axis.asArray, 1, 2, zRotaion1, 2, 2);
+
+	axis = Normalized(vec2(rect1.halfExtents.x, 0));
+	Multiply(axisToTest[1].asArray, axis.asArray, 1, 2, zRotaion1, 2, 2);
+
+	axis = Normalized(vec2(rect2.halfExtents.x, 0));
+	Multiply(axisToTest[2].asArray, axis.asArray, 1, 2, zRotaion2, 2, 2);
+
+	axis = Normalized(vec2(0, rect2.halfExtents.y));
+	Multiply(axisToTest[3].asArray, axis.asArray, 1, 2, zRotaion2, 2, 2);
+
+	for (int i = 0; i < 4; i++) {
+		if (!OverLapOnAxis(rect1, rect2, axisToTest[i])) {
+			return false;
+		}
+	}
+	return true;
+}
+
 

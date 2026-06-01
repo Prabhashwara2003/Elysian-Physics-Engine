@@ -81,5 +81,13 @@ Interval2D GetInterval(const Rectangle2D& rect, const vec2& axis);
 bool OverLapOnAxis(const Rectangle2D& rect1, const Rectangle2D& rect2, const vec2 axis);
 bool RectangleRectangleSaT(const Rectangle2D& rect1, const Rectangle2D& rect2);
 
+Interval2D GetInterval(const OrientedRectangle& rectangle, const vec2& axis);
+bool OverLapOnAxis(const Rectangle2D& rect1, const OrientedRectangle& rect2, const vec2& axis);
+bool RectagleOrientedRectangle(const Rectangle2D& rect1, const OrientedRectangle rect2);
+
+bool OverLapOnAxis(const OrientedRectangle& rect1, const OrientedRectangle& rect2, const vec2& axis);
+bool RectagleOrientedRectangle(const OrientedRectangle& rect1, const OrientedRectangle& rect2);
+
+
 #endif _H_2D_GEOMETRY_
 
