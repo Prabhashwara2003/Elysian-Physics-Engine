@@ -11,8 +11,8 @@ typedef struct Line2D {
 	Point2D End;
 
 	inline Line2D() {};
-	inline Line2D(const Point2D& start, const Point2D& End)
-		:Start(Start),End(End)
+	inline Line2D(const Point2D& start, const Point2D& end)
+		:Start(start), End(end)
 	{
 
 	}
@@ -87,7 +87,6 @@ bool RectagleOrientedRectangle(const Rectangle2D& rect1, const OrientedRectangle
 
 bool OverLapOnAxis(const OrientedRectangle& rect1, const OrientedRectangle& rect2, const vec2& axis);
 bool RectagleOrientedRectangle(const OrientedRectangle& rect1, const OrientedRectangle& rect2);
-
 
 #endif _H_2D_GEOMETRY_
 

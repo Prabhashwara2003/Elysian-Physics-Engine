@@ -87,21 +87,21 @@ bool LineCircle(const Line2D& line, const Circle& circle) {
 }
 bool LineRectangle(const Line2D& line, const Rectangle2D& rectangle) {
 	if (pointInRectangle(line.Start, rectangle) ||
-		pointInRectangle(line.Start, rectangle)) {
+		pointInRectangle(line.End, rectangle)) {
 		return true;
 	}
 	vec2 norm = Normalized(line.End - line.Start);
 	norm.x = (norm.x != 0) ? 1.0f / norm.x : 0;
-	norm.y = (norm.y != 0) ? 1.0f / norm.x : 0;
+	norm.y = (norm.y != 0) ? 1.0f / norm.y : 0;
 	vec2 min = (GetMin(rectangle) - line.Start) * norm;
 	vec2 max = (GetMax(rectangle) - line.Start) * norm;
 	float tmin = fmaxf(
-		fminf(min.x, max.y),
+		fminf(min.x, max.x),
 		fminf(min.y, max.y)
 	);
 	float tmax = fminf(
-		fminf(min.x, max.y),
-		fminf(min.y, max.y)
+		fmaxf(min.x, max.x),
+		fmaxf(min.y, max.y)
 	);
 	if (tmax < 0 || tmin > tmax) {
 		return false;
@@ -117,7 +117,10 @@ bool LineOrintedRectangle(const Line2D& line, const OrientedRectangle& rectangle
 
 	vec2 rotVector = line.Start - rectangle.position;
 	Multiply(rotVector.asArray, vec2(rotVector.x, rotVector.y).asArray, 1, 2, zrotation2X2, 2, 2);
+	localLine.Start = rotVector + rectangle.halfExtents;
 
+	rotVector = line.End - rectangle.position;
+	Multiply(rotVector.asArray, vec2(rotVector.x, rotVector.y).asArray, 1, 2, zrotation2X2, 2, 2);
 	localLine.End = rotVector + rectangle.halfExtents;
 
 	Rectangle2D localRectangle(Point2D(), rectangle.halfExtents * 2.0f);
@@ -275,7 +278,7 @@ bool RectagleOrientedRectangle(const OrientedRectangle& rect1, const OrientedRec
 	vec2 axis = Normalized(vec2(rect1.halfExtents.x, 0));
 	Multiply(axisToTest[0].asArray, axis.asArray, 1, 2, zRotaion1, 2, 2);
 
-	axis = Normalized(vec2(rect1.halfExtents.x, 0));
+	axis = Normalized(vec2(0, rect1.halfExtents.y));
 	Multiply(axisToTest[1].asArray, axis.asArray, 1, 2, zRotaion1, 2, 2);
 
 	axis = Normalized(vec2(rect2.halfExtents.x, 0));
