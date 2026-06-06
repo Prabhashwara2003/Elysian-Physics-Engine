@@ -4,7 +4,7 @@
 //#include "Rectangle.h"
 
 
-class Collision
+class Collision 
 {
 public:
 	//void checkCollision(std::vector<Ball*>& balls);

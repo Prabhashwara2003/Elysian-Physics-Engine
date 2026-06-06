@@ -140,30 +140,30 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Circle.cpp" />
+    <ClCompile Include="src\Object.cpp" />
+    <ClCompile Include="src\PhysicsSystem.cpp" />
+    <ClCompile Include="src\Rigidbody.cpp" />
     <ClCompile Include="src\Collision.cpp" />
     <ClCompile Include="src\Geometry2D.cpp" />
     <ClCompile Include="src\matrices.cpp" />
-    <ClCompile Include="src\Rectangle.cpp" />
-    <ClCompile Include="src\Ball.cpp" />
-    <ClCompile Include="src\PhysicsObject.cpp" />
-    <ClCompile Include="src\Gravity.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\vectors.cpp" />
+    <ClCompile Include="src\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Circle.h" />
+    <ClInclude Include="src\Object.h" />
+    <ClInclude Include="src\PhysicsSystem.h" />
+    <ClInclude Include="src\Rigidbody.h" />
     <ClInclude Include="src\Collision.h" />
     <ClInclude Include="src\Geometry2D.h" />
     <ClInclude Include="src\matrices.h" />
-    <ClInclude Include="src\Rectangle.h" />
-    <ClInclude Include="src\Ball.h" />
-    <ClInclude Include="src\PhysicsObject.h" />
-    <ClInclude Include="src\Gravity.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Application.h" />
     <ClInclude Include="src\vectors.h" />
+    <ClInclude Include="src\Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

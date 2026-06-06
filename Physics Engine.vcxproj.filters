@@ -24,18 +24,6 @@
     <ClCompile Include="src\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Gravity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Ball.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\PhysicsObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rectangle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Collision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -45,10 +33,22 @@
     <ClCompile Include="src\matrices.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Circle.cpp">
+    <ClCompile Include="src\Geometry2D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Geometry2D.cpp">
+    <ClCompile Include="src\Rigidbody.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PhysicsSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Transform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Circle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -57,18 +57,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Gravity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Ball.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\PhysicsObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rectangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Collision.h">
@@ -80,10 +68,22 @@
     <ClInclude Include="src\matrices.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Circle.h">
+    <ClInclude Include="src\Geometry2D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Geometry2D.h">
+    <ClInclude Include="src\Rigidbody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PhysicsSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Circle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

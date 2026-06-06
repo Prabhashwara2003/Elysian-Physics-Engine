@@ -41,6 +41,7 @@ vec2 operator* (const vec2& l, const float& r);
 bool operator== (const vec2& l, const vec2& r);
 bool operator!= (const vec2& l, const vec2& r);
 float Dot (const vec2& l, const vec2& r);
+float Cross(const vec2& l, const vec2& r);
 float Magnitude (const vec2& v);
 float Magnitudesqr(const vec2& v);
 float Distance(const vec2& l, const vec2& r);

@@ -39,6 +39,10 @@ float Dot(const vec2& l, const vec2& r) {
 	return  l.x * r.x + l.y * r.y;
 };
 
+float Cross(const vec2& l, const vec2& r) {
+	return l.x * r.y - l.y * r.x;
+};
+
 float Magnitude(const vec2& v){
 	return sqrt(Dot(v, v));
 };
