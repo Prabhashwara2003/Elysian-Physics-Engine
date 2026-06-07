@@ -22,15 +22,15 @@ public:
 	float angularVelocity;
 	vec2 drag;
 	vec2 angularDrag;
-	//Transform transform;
+	Transform* transform;
 
 	float inverseMass = 1.0f / mass;
 	
 
-	Rigidbody(float deltaTime);
+	Rigidbody(vec2 position, float rotation, vec2 scale);
 	virtual ~Rigidbody();
 
-	void Integrate();
+	void Integrate(float deltaTime);
 	virtual void Update(float deltaTime);
 	virtual void ApplyForce(vec2 force);
 	virtual void ApplyImpulse(vec2 impulse);

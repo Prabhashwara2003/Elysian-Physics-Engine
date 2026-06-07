@@ -1,11 +1,11 @@
 #include "PhysicsSystem.h"
 
-void PhysicsSystem::Update(float deltaTime) {
-	for (int i = 0, size = objects.size(); i < size; i++) {
-		objects[i]->ApplyForce();
+void PhysicsSystem::AddRigidbody(Rigidbody* body){
+	rigidBodies.push_back(body);
+}
+
+void PhysicsSystem::Step(float deltaTime) {
+	for (Rigidbody* rb : rigidBodies) {
+		rb->Integrate(deltaTime);
 	}
-	for (int i = 0, size = objects.size(); i < size; i++) {
-		bodies[i]->Update(deltaTime);
-	}
-	
 }

@@ -10,12 +10,12 @@ class PhysicsSystem {
 
 protected:
 	std::vector<Object*> objects;
+	std::vector<Rigidbody* > rigidBodies;
 
 public:
-	void Update(float deltaTime);
-	void Render();
+
 	void AddRigidbody(Rigidbody* body);
-	void ClearRigidbody();
+	void Step(float deltaTime);
 
 };
 
