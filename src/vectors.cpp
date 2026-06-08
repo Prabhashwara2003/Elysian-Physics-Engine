@@ -1,15 +1,6 @@
 #include "vectors.h"
 #include <cmath>
-#include <cfloat>
-
-#define CMP(x,y)							\
-	(fabsf((x) - (y)) <= FLT_EPSILON *		\
-	fmaxf(1.0f,								\
-	fmaxf(fabsf(x),fabsf(y))))		
-
-#define RAG2DEG(x) ((x) * 57.295754f)
-#define DEG2RAD(x) ((x) * 0.017453292f)
-	
+#include <cfloat>	
 
 vec2 operator+ (const vec2& l, const vec2& r) {
 	return { l.x + r.x, l.y + r.y };
@@ -42,6 +33,10 @@ float Dot(const vec2& l, const vec2& r) {
 float Cross(const vec2& l, const vec2& r) {
 	return l.x * r.y - l.y * r.x;
 };
+
+vec2 Cross(float scalar, const vec2& v) {
+	return vec2(-scalar * v.y, scalar * v.x);
+}
 
 float Magnitude(const vec2& v){
 	return sqrt(Dot(v, v));

@@ -12,10 +12,8 @@ Rigidbody::Rigidbody(vec2 position, float rotation, vec2 scale) {
 	drag = vec2(0.1f, 0.1f);
 	angularDrag = vec2(0.1f, 0.1f);
 	transform = new Transform(position, rotation, scale);
-}
-
-void Rigidbody::ApplyGravity() {
-	accumulatedForces = accumulatedForces + vec2(0, 6);
+	bounciness = 0.5f;
+	inverseMass = 1.0f / mass;
 }
 
 void Rigidbody::Integrate(float deltaTime) {
@@ -36,12 +34,23 @@ void Rigidbody::Integrate(float deltaTime) {
 	accumulatedTorque = 0;
 }
 
+void Rigidbody::ApplyGravity() {
+	accumulatedForces = accumulatedForces + vec2(0, 6);
+}
+
 void Rigidbody::ApplyForce(vec2 force) {
 	accumulatedForces = accumulatedForces + force;
 }
 
 void Rigidbody::ApplyImpulse(vec2 impulse) {
-	impulses = impulses + impulse;
+	velocity = velocity + (impulse * inverseMass);
+}
+
+void Rigidbody::ApplyImpulseAtPosition(vec2 impulse, Point2D position, float momentOfInertia) {
+	vec2 r = position - transform->position;
+	angularVelocity += (r.x * impulse.y - r.y * impulse.x) / momentOfInertia;
+	ApplyImpulse(impulse);
+	
 }
 
 void Rigidbody::ApplyTorque(float torque) {

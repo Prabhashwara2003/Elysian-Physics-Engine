@@ -10,9 +10,10 @@
 class Rigidbody : Object
 {
 public:
-
+	
 	float deltaTime;
 	float mass;
+	float inverseMass;
 	vec2 accumulatedForces;
 	float accumulatedTorque;
 	vec2 impulses;
@@ -23,17 +24,16 @@ public:
 	vec2 drag;
 	vec2 angularDrag;
 	Transform* transform;
-
-	float inverseMass = 1.0f / mass;
-	
+	float bounciness;
+	float friction;
 
 	Rigidbody(vec2 position, float rotation, vec2 scale);
 	virtual ~Rigidbody();
 
 	void Integrate(float deltaTime);
-	virtual void Update(float deltaTime);
 	virtual void ApplyForce(vec2 force);
 	virtual void ApplyImpulse(vec2 impulse);
+	virtual void ApplyImpulseAtPosition(vec2 impulse, Point2D position, float momentOfInertia);
 	virtual void ApplyForceAtPosition(vec2 force,Point2D position);
 	virtual void ApplyTorque(float torque);
 	void ApplyGravity();

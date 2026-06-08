@@ -2,6 +2,14 @@
 #ifndef _H_MATH_VECTORS_
 #define _H_MATH_VECTORS_
 
+#define CMP(x,y)							\
+	(fabsf((x) - (y)) <= FLT_EPSILON *		\
+	fmaxf(1.0f,								\
+	fmaxf(fabsf(x),fabsf(y))))		
+
+#define RAG2DEG(x) ((x) * 57.295754f)
+#define DEG2RAD(x) ((x) * 0.017453292f)
+
 //Structure definition
 typedef struct vec2 {
 	union {
@@ -42,6 +50,7 @@ bool operator== (const vec2& l, const vec2& r);
 bool operator!= (const vec2& l, const vec2& r);
 float Dot (const vec2& l, const vec2& r);
 float Cross(const vec2& l, const vec2& r);
+vec2 Cross(float scalar, const vec2& v);
 float Magnitude (const vec2& v);
 float Magnitudesqr(const vec2& v);
 float Distance(const vec2& l, const vec2& r);
