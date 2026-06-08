@@ -1,12 +1,8 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "Transform.h"
-#include <iostream>
+#include "ShapeTypes.h"
 
-enum class Shape {
-	circle,
-	box
-};
+namespace elysian {
 
 class Object
 {
@@ -16,4 +12,6 @@ public:
 
 	Object();
 };
+
+} // namespace elysian
 

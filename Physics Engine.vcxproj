@@ -139,35 +139,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\AABB.cpp" />
     <ClCompile Include="src\Collider2D.cpp" />
-    <ClCompile Include="src\Circle.cpp" />
+    <ClCompile Include="src\CollisionDetector.cpp" />
+    <ClCompile Include="src\CollisionInfo.cpp" />
+    <ClCompile Include="src\CollisionResolver.cpp" />
+    <ClCompile Include="src\Geometry2D.cpp" />
+    <ClCompile Include="src\matrices.cpp" />
     <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\PhysicsSystem.cpp" />
     <ClCompile Include="src\Rigidbody.cpp" />
-    <ClCompile Include="src\Collision.cpp" />
-    <ClCompile Include="src\Geometry2D.cpp" />
-    <ClCompile Include="src\matrices.cpp" />
-    <ClCompile Include="src\Renderer.cpp" />
-    <ClCompile Include="src\Application.cpp" />
-    <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\vectors.cpp" />
     <ClCompile Include="src\Transform.cpp" />
+    <ClCompile Include="src\vectors.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\AABB.h" />
     <ClInclude Include="src\Collider2D.h" />
-    <ClInclude Include="src\Circle.h" />
+    <ClInclude Include="src\CollisionDetector.h" />
+    <ClInclude Include="src\CollisionInfo.h" />
+    <ClInclude Include="src\CollisionResolver.h" />
+    <ClInclude Include="src\Geometry2D.h" />
+    <ClInclude Include="src\matrices.h" />
     <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\PhysicsSystem.h" />
     <ClInclude Include="src\Rigidbody.h" />
-    <ClInclude Include="src\Collision.h" />
-    <ClInclude Include="src\Geometry2D.h" />
-    <ClInclude Include="src\matrices.h" />
-    <ClInclude Include="src\Renderer.h" />
-    <ClInclude Include="src\Application.h" />
-    <ClInclude Include="src\vectors.h" />
+    <ClInclude Include="src\ShapeTypes.h" />
     <ClInclude Include="src\Transform.h" />
+    <ClInclude Include="src\vectors.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

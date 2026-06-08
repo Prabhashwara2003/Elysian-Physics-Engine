@@ -1,51 +1,70 @@
 #include "Collider2D.h"
+#include <cfloat>
+#include <cmath>
+
+namespace elysian {
+
+Collider2D::~Collider2D() {}
 
 Collider2D::Collider2D(Transform* transform) 
-	:transform(transform)
+	: transform(transform)
+	, rigidbody(nullptr)
 {}
 
 CircleCollider::CircleCollider(Circle* circle, Transform* transform) 
 	:circle(circle),Collider2D(transform)
 {
-	this-> momentOfInertia = (circle->radius * circle->radius) * 0.5;
+	this->momentOfInertia = (circle->radius * circle->radius) * 0.5f;
 }
 
-AABB CircleCollider::getAABB() {
-	vec2 min = vec2(circle->Position - vec2(circle->radius, circle->radius));
-	vec2 max = vec2(circle->Position + vec2(circle->radius, circle->radius));
+void CircleCollider::SyncTransform() {
+	circle->Position = transform->position;
+}
 
-	return AABB(min, max);
+Rectangle2D CircleCollider::getAABB() {
+	vec2 min = circle->Position - vec2(circle->radius, circle->radius);
+	vec2 size = vec2(2 * circle->radius, 2 * circle->radius);
+
+	return Rectangle2D(min, size);
 }
 
 BoxCollider::BoxCollider(OrientedRectangle* rectangle, Transform* transform)
 	:rectangle(rectangle),Collider2D(transform)
 {
 	vec2 temp = rectangle->halfExtents * 2;
-	this->momentOfInertia = Dot(temp,temp);
+	this->momentOfInertia = Dot(temp, temp);
 }
 
-AABB BoxCollider::getAABB() {
+void BoxCollider::SyncTransform() {
+	rectangle->position = transform->position;
+	rectangle->rotation = transform->rotation;
+}
 
-	vec2 v1 = rectangle->position + rectangle->halfExtents;
-	vec2 v2 = rectangle->position - rectangle->halfExtents;
-	vec2 v3 = vec2(v1.x , v2.y);
-	vec2 v4 = vec2(v2.x, v1.y);
-
+Rectangle2D BoxCollider::getAABB() {
+	vec2 half = rectangle->halfExtents;
+	vec2 center = rectangle->position;
 	float angle = DEG2RAD(rectangle->rotation);
-	float zRotation2X2[] = {cosf(angle),sinf(angle),-sinf(angle),cosf(angle)};
+	float zRotation2X2[] = {cosf(angle), sinf(angle), -sinf(angle), cosf(angle)};
 
-	Multiply(v1.asArray, v1.asArray, 2, 1, zRotation2X2, 2, 2);
-	Multiply(v1.asArray, v1.asArray, 2, 1, zRotation2X2, 2, 2);
-	Multiply(v1.asArray, v1.asArray, 2, 1, zRotation2X2, 2, 2);
-	Multiply(v1.asArray, v1.asArray, 2, 1, zRotation2X2, 2, 2);
+	vec2 corners[4] = {
+		vec2(-half.x, -half.y),
+		vec2( half.x, -half.y),
+		vec2( half.x,  half.y),
+		vec2(-half.x,  half.y)
+	};
 
-	float minx = fminf(fminf(v1.x, v2.x), fminf(v3.x, v4.x));
-	float miny = fminf(fminf(v1.y, v2.y), fminf(v3.y, v4.y));
-	float maxx = fmaxf(fmaxf(v1.x, v2.x), fmaxf(v3.x, v4.x));
-	float maxy = fmaxf(fmaxf(v1.y, v2.y), fmaxf(v3.y, v4.y));
+	float minx = FLT_MAX, miny = FLT_MAX, maxx = -FLT_MAX, maxy = -FLT_MAX;
+	for (int i = 0; i < 4; i++) {
+		vec2 rotated;
+		Multiply(rotated.asArray, corners[i].asArray, 1, 2, zRotation2X2, 2, 2);
+		rotated = rotated + center;
+		if (rotated.x < minx) minx = rotated.x;
+		if (rotated.y < miny) miny = rotated.y;
+		if (rotated.x > maxx) maxx = rotated.x;
+		if (rotated.y > maxy) maxy = rotated.y;
+	}
 
-	vec2 max = vec2(maxx,maxy);
-	vec2 min = vec2(minx, miny);
-
-	return AABB(min, max);
+	return Rectangle2D(vec2(minx, miny), vec2(maxx - minx, maxy - miny));
 }
+
+} // namespace elysian

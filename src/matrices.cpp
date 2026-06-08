@@ -2,10 +2,7 @@
 #include <cmath>
 #include <cfloat>
 
-#define CMP(x,y)							\
-	(fabsf((x) - (y)) <= FLT_EPSILON *		\
-	fmaxf(1.0f,								\
-	fmaxf(fabsf(x),fabsf(y))))		
+namespace elysian {
 
 void Transpose(const float* srcMat, float* dstMat, int srcRow, int srcCol) {
 	for (int i = 0;i < srcRow * srcCol; i++) {
@@ -92,4 +89,6 @@ mat3 createScale(vec2 scalev) {
 	mat3 scale(scalev.x, 0, 0, 0, scalev.y, 0, 0, 0, 1);
 	return scale;
 }
+
+} // namespace elysian
 

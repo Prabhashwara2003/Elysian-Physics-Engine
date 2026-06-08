@@ -2,16 +2,15 @@
 #ifndef _H_RIGIDBODY
 #define _H_RIGIDBODY
 
-#include "PhysicsSystem.h"
 #include "Geometry2D.h"
-#include <vector>
 #include "Transform.h"
 
-class Rigidbody : Object
+namespace elysian {
+
+class Rigidbody
 {
 public:
 	
-	float deltaTime;
 	float mass;
 	float inverseMass;
 	vec2 accumulatedForces;
@@ -21,23 +20,26 @@ public:
 	vec2 acceleration;
 	vec2 velocity;
 	float angularVelocity;
-	vec2 drag;
-	vec2 angularDrag;
+	float drag;
+	float angularDrag;
 	Transform* transform;
 	float bounciness;
 	float friction;
+	float gravityScale;
 
 	Rigidbody(vec2 position, float rotation, vec2 scale);
 	virtual ~Rigidbody();
 
 	void Integrate(float deltaTime);
-	virtual void ApplyForce(vec2 force);
-	virtual void ApplyImpulse(vec2 impulse);
-	virtual void ApplyImpulseAtPosition(vec2 impulse, Point2D position, float momentOfInertia);
-	virtual void ApplyForceAtPosition(vec2 force,Point2D position);
-	virtual void ApplyTorque(float torque);
-	void ApplyGravity();
+	void ApplyForce(vec2 force);
+	void ApplyImpulse(vec2 impulse);
+	void ApplyImpulseAtPosition(vec2 impulse, Point2D position, float momentOfInertia);
+	void ApplyForceAtPosition(vec2 force, Point2D position);
+	void ApplyTorque(float torque);
+	void ApplyGravity(const vec2& gravity);
 };
+
+} // namespace elysian
 
 
 #endif // !_H_RIGIDBODY

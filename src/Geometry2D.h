@@ -4,9 +4,16 @@
 
 #include "vectors.h"
 
+namespace elysian {
+
+#ifndef CLAMP
+#define CLAMP(number, minimum, maximum) number = (number < minimum) ? minimum : ((number > maximum) ? maximum : number)
+#endif
+
+
 typedef vec2 Point2D;
 
-typedef struct Line2D {
+struct Line2D {
 	Point2D Start;
 	Point2D End;
 
@@ -18,7 +25,7 @@ typedef struct Line2D {
 	}
 };
 
-typedef struct Circle {
+struct Circle {
 	Point2D Position;
 	float radius;
 
@@ -28,7 +35,7 @@ typedef struct Circle {
 	{}
 };
 
-typedef struct Rectangle2D {
+struct Rectangle2D {
 	Point2D origin;
 	vec2 size;
 
@@ -38,7 +45,7 @@ typedef struct Rectangle2D {
 	{};
 };
 
-typedef struct OrientedRectangle {
+struct OrientedRectangle {
 	Point2D position;
 	vec2 halfExtents;
 	float rotation;
@@ -52,7 +59,7 @@ typedef struct OrientedRectangle {
 	{ }
 };
 
-typedef struct Interval2D {
+struct Interval2D {
 	float min;
 	float max;
 };
@@ -71,22 +78,24 @@ bool pointInOrientedRectangle(const Point2D point, const OrientedRectangle& rect
 
 bool LineCircle(const Line2D& line, const Circle& circle);
 bool LineRectangle(const Line2D& line, const Rectangle2D& rectangle);
-bool LineOrintedRectangle(const Line2D& line, const OrientedRectangle& rectangle);
+bool LineOrientedRectangle(const Line2D& line, const OrientedRectangle& rectangle);
 
 bool CircleCircle(const Circle& c1, const Circle& c2);
 bool CircleRectangle(const Circle& circle, const Rectangle2D& rectangle);
 bool CircleOrientedRectangle(const Circle& circle, const OrientedRectangle& rectangle);
 
 Interval2D GetInterval(const Rectangle2D& rect, const vec2& axis);
-bool OverLapOnAxis(const Rectangle2D& rect1, const Rectangle2D& rect2, const vec2 axis);
+bool OverlapOnAxis(const Rectangle2D& rect1, const Rectangle2D& rect2, const vec2 axis);
 bool RectangleRectangleSaT(const Rectangle2D& rect1, const Rectangle2D& rect2);
 
 Interval2D GetInterval(const OrientedRectangle& rectangle, const vec2& axis);
-bool OverLapOnAxis(const Rectangle2D& rect1, const OrientedRectangle& rect2, const vec2& axis);
-bool RectagleOrientedRectangle(const Rectangle2D& rect1, const OrientedRectangle rect2);
+bool OverlapOnAxis(const Rectangle2D& rect1, const OrientedRectangle& rect2, const vec2& axis);
+bool RectangleOrientedRectangle(const Rectangle2D& rect1, const OrientedRectangle rect2);
 
-bool OverLapOnAxis(const OrientedRectangle& rect1, const OrientedRectangle& rect2, const vec2& axis);
-bool RectagleOrientedRectangle(const OrientedRectangle& rect1, const OrientedRectangle& rect2);
+bool OverlapOnAxis(const OrientedRectangle& rect1, const OrientedRectangle& rect2, const vec2& axis);
+bool RectangleOrientedRectangle(const OrientedRectangle& rect1, const OrientedRectangle& rect2);
+
+} // namespace elysian
 
 #endif _H_2D_GEOMETRY_
 

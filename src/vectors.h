@@ -10,8 +10,10 @@
 #define RAG2DEG(x) ((x) * 57.295754f)
 #define DEG2RAD(x) ((x) * 0.017453292f)
 
+namespace elysian {
+
 //Structure definition
-typedef struct vec2 {
+struct vec2 {
 	union {
 		struct {
 			float x;
@@ -19,6 +21,10 @@ typedef struct vec2 {
 		};
 		float asArray[2];
 	};
+
+	vec2() : x(0), y(0) {}
+	vec2(float x, float y) : x(x), y(y) {}
+
 	float& operator[] (int i) {
 		return asArray[i];
 	}
@@ -26,7 +32,7 @@ typedef struct vec2 {
 };
 
 //for future implements
-typedef struct vec3 {
+struct vec3 {
 	union {
 		struct {
 			float x;
@@ -35,6 +41,10 @@ typedef struct vec3 {
 		};
 		float asArray[3];
 	};
+
+	vec3() : x(0), y(0), z(0) {}
+	vec3(float x, float y, float z) : x(x), y(y), z(z) {}
+
 	float& operator[](int i) {
 		return asArray[i];
 	}
@@ -61,6 +71,6 @@ vec2 Projection(const vec2& v, const vec2& direction);
 vec2 Perpendicular(const vec2& v, const vec2& direction);
 vec2 Reflection(const vec2& v, const vec2& direction);
 
-
+} // namespace elysian
 
 #endif // !_H_MATH_VECTORS_

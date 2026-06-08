@@ -1,8 +1,8 @@
 #pragma once
 
-
 #include "vectors.h"
-#include "Object.h"
+
+namespace elysian {
 
 class Transform
 {
@@ -17,4 +17,6 @@ public:
 	void Rotate(float angle);
 
 };
+
+} // namespace elysian
 

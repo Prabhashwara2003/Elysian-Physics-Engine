@@ -1,6 +1,8 @@
 #include "vectors.h"
 #include <cmath>
-#include <cfloat>	
+#include <cfloat>
+
+namespace elysian {
 
 vec2 operator+ (const vec2& l, const vec2& r) {
 	return { l.x + r.x, l.y + r.y };
@@ -76,5 +78,7 @@ vec2 Perpendicular(const vec2& v, const vec2& direction) {
 vec2 Reflection(const vec2& v, const vec2& direction) {
 	return v - Projection(v, direction) * 2.0f;
 };
+
+} // namespace elysian
 
 

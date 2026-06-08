@@ -1,12 +1,15 @@
 #pragma once
 #include "CollisionInfo.h"
 
+namespace elysian {
+
 class CollisionResolver
 {
 public:
-	CollisionInfo& info;
 	CollisionResolver();
 	void Resolve(CollisionInfo& info);
 
 };
+
+} // namespace elysian
 

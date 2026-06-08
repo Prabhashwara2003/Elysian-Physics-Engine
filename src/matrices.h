@@ -3,8 +3,10 @@
 #define _h_MATH_MATRICES_
 #include "vectors.h"
 
+namespace elysian {
+
 //structure definition
-typedef struct mat2 {
+struct mat2 {
 	union {
 		struct {
 			float _11, _12,
@@ -26,7 +28,7 @@ typedef struct mat2 {
 		_22 = f22;
 	}
 };
-typedef struct mat3 {
+struct mat3 {
 	union {
 		struct {
 			float _11, _12,_13,
@@ -55,7 +57,7 @@ typedef struct mat3 {
 		_33 = f33;
 	}
 };
-typedef struct mat4 {
+struct mat4 {
 	union {
 		struct {
 			float _11, _12, _13,_14,
@@ -76,7 +78,7 @@ mat3 Transpose(const mat3& matrix);
 mat4 Transpose(const mat4& matrix);
 
 mat2 operator* (const mat2& matrix, float scalar);
-mat3 operator* (const mat3& matrix, float saclar);
+mat3 operator* (const mat3& matrix, float scalar);
 bool Multiply(float* out, const float* matA, int aRow, int aCol, const float* matB, int bRow, int bCol);
 mat2 operator* (const mat2& matA, const mat2& matB);
 mat3 operator* (const mat3& matA, const mat3& matB);
@@ -84,5 +86,7 @@ mat3 operator* (const mat3& matA, const mat3& matB);
 mat3 createTranslation(vec2 position);
 mat3 createRotation(float angle);
 mat3 createScale(vec2 scalev);
+
+} // namespace elysian
 
 #endif // _H_MATH_MATRICES_
