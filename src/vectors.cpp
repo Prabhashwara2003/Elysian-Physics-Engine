@@ -62,7 +62,7 @@ vec2 Normalized(const vec2& v) {
 };
 
 float Angle(const vec2& l, const vec2& r) {
-	return RAG2DEG(acosf(Dot(l, r) / (Magnitude(l) * Magnitude(r))));
+	return RAD2DEG(acosf(Dot(l, r) / (Magnitude(l) * Magnitude(r))));
 };
 
 vec2 Projection(const vec2& v, const vec2& direction) {

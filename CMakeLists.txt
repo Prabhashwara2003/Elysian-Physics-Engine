@@ -13,7 +13,6 @@ add_library(PhysicsEngine
     src/CollisionResolver.cpp
     src/Geometry2D.cpp
     src/matrices.cpp
-    src/Object.cpp
     src/PhysicsSystem.cpp
     src/Rigidbody.cpp
     src/Transform.cpp

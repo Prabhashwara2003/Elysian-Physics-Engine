@@ -6,8 +6,8 @@ Transform::Transform(vec2 position, float rotation, vec2 scale)
 	:position(position),rotation(rotation),scale(scale)
 {}
 
-void Transform::Translate(vec2 newPosition) {
-	position = position + newPosition;
+void Transform::Translate(vec2 delta) {
+	position = position + delta;
 }
 
 void Transform::Rotate(float angle) {

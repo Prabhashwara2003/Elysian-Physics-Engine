@@ -7,7 +7,7 @@
 	fmaxf(1.0f,								\
 	fmaxf(fabsf(x),fabsf(y))))		
 
-#define RAG2DEG(x) ((x) * 57.295754f)
+#define RAD2DEG(x) ((x) * 57.295754f)
 #define DEG2RAD(x) ((x) * 0.017453292f)
 
 namespace elysian {

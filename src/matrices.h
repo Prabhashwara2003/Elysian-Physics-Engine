@@ -70,7 +70,13 @@ struct mat4 {
 	inline float* operator[](int i) {
 		return &(asArray[i * 4]);
 	}
-};//for future implements
+	inline mat4() {
+		_11 = _22 = _33 = _44 = 1.0f;
+		_12 = _13 = _14 = _21 = 0.0f;
+		_23 = _24 = _31 = _32 = 0.0f;
+		_34 = _41 = _42 = _43 = 0.0f;
+	}
+};
 
 void Transpose(const float* srcMat, float* dstMat, int srcRow, int srcCol);
 mat2 Transpose(const mat2& matrix);

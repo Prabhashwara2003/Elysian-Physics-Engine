@@ -145,7 +145,6 @@
     <ClCompile Include="src\CollisionResolver.cpp" />
     <ClCompile Include="src\Geometry2D.cpp" />
     <ClCompile Include="src\matrices.cpp" />
-    <ClCompile Include="src\Object.cpp" />
     <ClCompile Include="src\PhysicsSystem.cpp" />
     <ClCompile Include="src\Rigidbody.cpp" />
     <ClCompile Include="src\Transform.cpp" />
@@ -158,7 +157,6 @@
     <ClInclude Include="src\CollisionResolver.h" />
     <ClInclude Include="src\Geometry2D.h" />
     <ClInclude Include="src\matrices.h" />
-    <ClInclude Include="src\Object.h" />
     <ClInclude Include="src\PhysicsSystem.h" />
     <ClInclude Include="src\Rigidbody.h" />
     <ClInclude Include="src\ShapeTypes.h" />

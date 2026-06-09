@@ -23,7 +23,7 @@ int main() {
     window.setFramerateLimit(60);
 
     PhysicsSystem physics;
-    physics.SetGravity(vec2(0.0f, 9.8f));
+    physics.SetGravity(vec2(0.0f, 980.f));
 
     std::vector<std::unique_ptr<DemoObject>> objects;
     std::vector<std::unique_ptr<Rigidbody>> rigidbodies;

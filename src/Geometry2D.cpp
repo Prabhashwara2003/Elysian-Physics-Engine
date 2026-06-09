@@ -29,6 +29,9 @@ Rectangle2D FromMinMax(const vec2& min, const vec2& max) {
 bool PointInLine(const Point2D& Point, const Line2D& line) {
 	float dy = line.Start.y - line.End.y;
 	float dx = line.Start.x - line.End.x;
+	if (fabsf(dx) < FLT_EPSILON) {
+		return CMP(Point.x, line.Start.x);
+	}
 	float m = dy / dx;
 	float c = line.Start.y - m * line.End.x;
 	return CMP(Point.y, m * Point.x + c);
@@ -48,7 +51,7 @@ bool pointInRectangle(const Point2D& point, const Rectangle2D& rectangle) {
 		point.x <= max.x &&
 		point.y <= max.y;
 }
-bool pointInOrientedRectangle(const Point2D point, const OrientedRectangle& rectangle) {
+bool pointInOrientedRectangle(const Point2D& point, const OrientedRectangle& rectangle) {
 	vec2 rotVector = point - rectangle.position;
 	float theta = -DEG2RAD(rectangle.rotation);
 	float zRotation2x2[] = { cosf(theta), sinf(theta), -sinf(theta) ,cosf(theta) };
@@ -60,7 +63,9 @@ bool pointInOrientedRectangle(const Point2D point, const OrientedRectangle& rect
 
 bool LineCircle(const Line2D& line, const Circle& circle) {
 	vec2 ab = line.Start - line.End;
-	float t = Dot(circle.Position - line.Start, ab) / Dot(ab, ab);
+	float abLenSq = Dot(ab, ab);
+	if (abLenSq < FLT_EPSILON) return false;
+	float t = Dot(circle.Position - line.Start, ab) / abLenSq;
 	if (t < 0.0f || t > 1.0f) {
 		return false;
 	}

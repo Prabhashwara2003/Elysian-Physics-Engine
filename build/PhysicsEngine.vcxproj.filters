@@ -19,9 +19,6 @@
     <ClCompile Include="C:\Users\msi\Projects\Physics Engine\src\matrices.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\msi\Projects\Physics Engine\src\Object.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="C:\Users\msi\Projects\Physics Engine\src\PhysicsSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

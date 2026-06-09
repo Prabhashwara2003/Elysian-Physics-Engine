@@ -33,7 +33,7 @@ mat4 Transpose(const mat4& mat) {
 mat2 operator* (const mat2& matrix, float scalar) {
 	mat2 temp;
 	for (int i = 0;i < 4;i++) {
-		temp.asArray[i] = matrix.asArray[i];
+		temp.asArray[i] = matrix.asArray[i] * scalar;
 	}
 	return temp;
 }
@@ -41,7 +41,7 @@ mat2 operator* (const mat2& matrix, float scalar) {
 mat3 operator* (const mat3& matrix, float scalar) {
 	mat3 temp;
 	for (int i = 0; i < 9; i++) {
-		temp.asArray[i] = matrix.asArray[i];
+		temp.asArray[i] = matrix.asArray[i] * scalar;
 	}
 	return temp;
 }

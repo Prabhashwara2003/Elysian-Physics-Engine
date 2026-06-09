@@ -50,7 +50,7 @@ struct OrientedRectangle {
 	vec2 halfExtents;
 	float rotation;
 
-	inline OrientedRectangle() : halfExtents(1.0f, 1.0f){}
+	inline OrientedRectangle() : position(0, 0), halfExtents(1.0f, 1.0f), rotation(0) {}
 	inline OrientedRectangle(const Point2D& position ,const vec2& halfExtents)
 		:position(position),halfExtents(halfExtents)
 	{ }
@@ -74,7 +74,7 @@ Rectangle2D FromMinMax(const vec2& min, const vec2& max);
 bool PointInLine(const Point2D& Point, const Line2D& line);
 bool PointInCircle(const Point2D& Point, const Circle& circle);
 bool pointInRectangle(const Point2D& point, const Rectangle2D& rectangle);
-bool pointInOrientedRectangle(const Point2D point, const OrientedRectangle& rectangle);
+bool pointInOrientedRectangle(const Point2D& point, const OrientedRectangle& rectangle);
 
 bool LineCircle(const Line2D& line, const Circle& circle);
 bool LineRectangle(const Line2D& line, const Rectangle2D& rectangle);
@@ -97,5 +97,5 @@ bool RectangleOrientedRectangle(const OrientedRectangle& rect1, const OrientedRe
 
 } // namespace elysian
 
-#endif _H_2D_GEOMETRY_
+#endif // _H_2D_GEOMETRY_
 

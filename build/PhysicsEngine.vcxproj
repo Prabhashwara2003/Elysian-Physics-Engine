@@ -298,7 +298,6 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="C:\Users\msi\Projects\Physics Engine\src\CollisionResolver.cpp" />
     <ClCompile Include="C:\Users\msi\Projects\Physics Engine\src\Geometry2D.cpp" />
     <ClCompile Include="C:\Users\msi\Projects\Physics Engine\src\matrices.cpp" />
-    <ClCompile Include="C:\Users\msi\Projects\Physics Engine\src\Object.cpp" />
     <ClCompile Include="C:\Users\msi\Projects\Physics Engine\src\PhysicsSystem.cpp" />
     <ClCompile Include="C:\Users\msi\Projects\Physics Engine\src\Rigidbody.cpp" />
     <ClCompile Include="C:\Users\msi\Projects\Physics Engine\src\Transform.cpp" />

@@ -6,13 +6,15 @@ namespace elysian {
 
 Collider2D::~Collider2D() {}
 
-Collider2D::Collider2D(Transform* transform) 
+Collider2D::Collider2D(Transform* transform, Shape shape)
 	: transform(transform)
 	, rigidbody(nullptr)
+	, shape(shape)
+	, momentOfInertia(0.0f)
 {}
 
 CircleCollider::CircleCollider(Circle* circle, Transform* transform) 
-	:circle(circle),Collider2D(transform)
+	:circle(circle),Collider2D(transform, Shape::circle)
 {
 	this->momentOfInertia = (circle->radius * circle->radius) * 0.5f;
 }
@@ -29,7 +31,7 @@ Rectangle2D CircleCollider::getAABB() {
 }
 
 BoxCollider::BoxCollider(OrientedRectangle* rectangle, Transform* transform)
-	:rectangle(rectangle),Collider2D(transform)
+	:rectangle(rectangle),Collider2D(transform, Shape::box)
 {
 	vec2 temp = rectangle->halfExtents * 2;
 	this->momentOfInertia = Dot(temp, temp);
