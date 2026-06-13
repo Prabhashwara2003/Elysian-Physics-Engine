@@ -166,7 +166,7 @@ include/
 ## Demo Application
 
 A separate demo application with SFML rendering is available at:
-**[Elysian Physics Demo](https://github.com/Prabhashwara2003/Elysian-Physics-Engine-demo.git)** (placeholder — link to your demo repo)
+**[Elysian Physics Demo](https://github.com/Prabhashwara2003/Elysian-Physics-Engine-demo.git)**
 
 ## License
 
