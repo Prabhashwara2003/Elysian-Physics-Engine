@@ -5,7 +5,8 @@ Debug/
 Release/
 x64/
 x86/
-build/
+build*/
+out/
 
 # Visual Studio files
 .vs/

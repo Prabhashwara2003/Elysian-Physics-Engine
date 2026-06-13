@@ -5,28 +5,29 @@
 
 namespace elysian {
 
-float Length(const Line2D& Line) {
+float Length(const Line2D& Line) noexcept {
 	return Magnitude(Line.Start - Line.End);
 }
-float LengthSqr(const Line2D& Line) {
+
+float LengthSqr(const Line2D& Line) noexcept {
 	return Magnitudesqr(Line.Start - Line.End);
 }
 
-vec2 GetMin(const Rectangle2D& rectangle) {
+vec2 GetMin(const Rectangle2D& rectangle) noexcept {
 	vec2 p1 = rectangle.origin;
 	vec2 p2 = rectangle.origin + rectangle.size;
 	return { fminf(p1.x, p2.x), fminf(p1.y, p2.y) };
 }
-vec2 GetMax(const Rectangle2D& rectangle) {
+vec2 GetMax(const Rectangle2D& rectangle) noexcept {
 	vec2 p1 = rectangle.origin;
 	vec2 p2 = rectangle.origin + rectangle.size;
 	return { fmaxf(p1.x, p2.x), fmaxf(p1.y, p2.y) };
 }
-Rectangle2D FromMinMax(const vec2& min, const vec2& max) {
+Rectangle2D FromMinMax(const vec2& min, const vec2& max) noexcept {
 	return Rectangle2D(min, max - min);
 }
 
-bool PointInLine(const Point2D& Point, const Line2D& line) {
+bool PointInLine(const Point2D& Point, const Line2D& line) noexcept {
 	float dy = line.Start.y - line.End.y;
 	float dx = line.Start.x - line.End.x;
 	if (fabsf(dx) < FLT_EPSILON) {
@@ -36,14 +37,13 @@ bool PointInLine(const Point2D& Point, const Line2D& line) {
 	float c = line.Start.y - m * line.End.x;
 	return CMP(Point.y, m * Point.x + c);
 }
-bool PointInCircle(const Point2D& Point, const Circle& circle) {
+
+bool PointInCircle(const Point2D& Point, const Circle& circle) noexcept {
 	Line2D line(Point, circle.Position);
-	if (LengthSqr(line) < circle.radius * circle.radius) {
-		return true;
-	}
-	return false;
+	return LengthSqr(line) < circle.radius * circle.radius;
 }
-bool pointInRectangle(const Point2D& point, const Rectangle2D& rectangle) {
+
+bool PointInRectangle(const Point2D& point, const Rectangle2D& rectangle) noexcept {
 	vec2 min = GetMin(rectangle);
 	vec2 max = GetMax(rectangle);
 	return min.x <= point.x &&
@@ -51,17 +51,18 @@ bool pointInRectangle(const Point2D& point, const Rectangle2D& rectangle) {
 		point.x <= max.x &&
 		point.y <= max.y;
 }
-bool pointInOrientedRectangle(const Point2D& point, const OrientedRectangle& rectangle) {
+
+bool PointInOrientedRectangle(const Point2D& point, const OrientedRectangle& rectangle) noexcept {
 	vec2 rotVector = point - rectangle.position;
 	float theta = -DEG2RAD(rectangle.rotation);
-	float zRotation2x2[] = { cosf(theta), sinf(theta), -sinf(theta) ,cosf(theta) };
+	float zRotation2x2[] = { std::cos(theta), std::sin(theta), -std::sin(theta), std::cos(theta) };
 	Multiply(rotVector.asArray, vec2(rotVector.x, rotVector.y).asArray, 1, 2, zRotation2x2, 2, 2);
 	Rectangle2D localRectangle(Point2D(), rectangle.halfExtents * 2.0f);
 	vec2 localPoint = rotVector + rectangle.halfExtents;
-	return pointInRectangle(localPoint, localRectangle);
+	return PointInRectangle(localPoint, localRectangle);
 }
 
-bool LineCircle(const Line2D& line, const Circle& circle) {
+bool LineCircle(const Line2D& line, const Circle& circle) noexcept {
 	vec2 ab = line.Start - line.End;
 	float abLenSq = Dot(ab, ab);
 	if (abLenSq < FLT_EPSILON) return false;
@@ -73,9 +74,9 @@ bool LineCircle(const Line2D& line, const Circle& circle) {
 	Line2D CircleToClosest(circle.Position, closestPoint);
 	return LengthSqr(CircleToClosest) < circle.radius * circle.radius;
 }
-bool LineRectangle(const Line2D& line, const Rectangle2D& rectangle) {
-	if (pointInRectangle(line.Start, rectangle) ||
-		pointInRectangle(line.End, rectangle)) {
+bool LineRectangle(const Line2D& line, const Rectangle2D& rectangle) noexcept {
+	if (PointInRectangle(line.Start, rectangle) ||
+		PointInRectangle(line.End, rectangle)) {
 		return true;
 	}
 	vec2 norm = Normalized(line.End - line.Start);
@@ -97,9 +98,9 @@ bool LineRectangle(const Line2D& line, const Rectangle2D& rectangle) {
 	float t = (tmin < 0.0f) ? tmax : tmin;
 	return t > 0.0f && t * t < LengthSqr(line);
 }
-bool LineOrientedRectangle(const Line2D& line, const OrientedRectangle& rectangle) {
+bool LineOrientedRectangle(const Line2D& line, const OrientedRectangle& rectangle) noexcept {
 	float theta = -DEG2RAD(rectangle.rotation);
-	float zrotation2X2[] = { cosf(theta), sinf(theta), -sinf(theta) ,cosf(theta) };
+	float zrotation2X2[] = { std::cos(theta), std::sin(theta), -std::sin(theta), std::cos(theta) };
 	Line2D localLine;
 	vec2 rotVector = line.Start - rectangle.position;
 	Multiply(rotVector.asArray, vec2(rotVector.x, rotVector.y).asArray, 1, 2, zrotation2X2, 2, 2);
@@ -111,12 +112,12 @@ bool LineOrientedRectangle(const Line2D& line, const OrientedRectangle& rectangl
 	return LineRectangle(localLine, localRectangle);
 }
 
-bool CircleCircle(const Circle& c1, const Circle& c2) {
+bool CircleCircle(const Circle& c1, const Circle& c2) noexcept {
 	Line2D line(c1.Position, c2.Position);
 	float radiusum = c1.radius + c2.radius;
 	return LengthSqr(line) < radiusum * radiusum;
 }
-bool CircleRectangle(const Circle& circle, const Rectangle2D& rectangle) {
+bool CircleRectangle(const Circle& circle, const Rectangle2D& rectangle) noexcept {
 	vec2 min = GetMin(rectangle);
 	vec2 max = GetMax(rectangle);
 	vec2 closestPoint = circle.Position;
@@ -125,17 +126,17 @@ bool CircleRectangle(const Circle& circle, const Rectangle2D& rectangle) {
 	Line2D line(closestPoint, circle.Position);
 	return LengthSqr(line) <= circle.radius * circle.radius;
 }
-bool CircleOrientedRectangle(const Circle& circle, const OrientedRectangle& rectangle) {
+bool CircleOrientedRectangle(const Circle& circle, const OrientedRectangle& rectangle) noexcept {
 	vec2 rotvector = circle.Position - rectangle.position;
 	float theta = -DEG2RAD(rectangle.rotation);
-	float zRotation2x2[] = { cosf(theta), sinf(theta), -sinf(theta), cosf(theta) };
+	float zRotation2x2[] = { std::cos(theta), std::sin(theta), -std::sin(theta), std::cos(theta) };
 	Multiply(rotvector.asArray, vec2(rotvector.x, rotvector.y).asArray, 1, 2, zRotation2x2, 2, 2);
 	Circle lCircle(rotvector + rectangle.halfExtents, circle.radius);
 	Rectangle2D lRect(Point2D(), rectangle.halfExtents * 2.0f);
 	return CircleRectangle(lCircle, lRect);
 }
 
-Interval2D GetInterval(const Rectangle2D& rect, const vec2& axis) {
+Interval2D GetInterval(const Rectangle2D& rect, const vec2& axis) noexcept {
 	Interval2D result;
 	vec2 min = GetMin(rect);
 	vec2 max = GetMax(rect);
@@ -152,12 +153,12 @@ Interval2D GetInterval(const Rectangle2D& rect, const vec2& axis) {
 	}
 	return result;
 }
-bool OverlapOnAxis(const Rectangle2D& rect1, const Rectangle2D& rect2, const vec2 axis) {
+bool OverlapOnAxis(const Rectangle2D& rect1, const Rectangle2D& rect2, const vec2 axis) noexcept {
 	Interval2D a = GetInterval(rect1, axis);
 	Interval2D b = GetInterval(rect2, axis);
 	return ((b.min <= a.max) && (a.min <= b.max));
 }
-bool RectangleRectangleSaT(const Rectangle2D& rect1, const Rectangle2D& rect2) {
+bool RectangleRectangleSAT(const Rectangle2D& rect1, const Rectangle2D& rect2) noexcept {
 	vec2 axisToTest[] = { vec2(1, 0), vec2(0, 1) };
 	for (int i = 0; i < 2; i++) {
 		if (!OverlapOnAxis(rect1, rect2, axisToTest[i])) {
@@ -167,41 +168,40 @@ bool RectangleRectangleSaT(const Rectangle2D& rect1, const Rectangle2D& rect2) {
 	return true;
 }
 
-Interval2D GetInterval(const OrientedRectangle& rectangle, const vec2& axis) {
-	Rectangle2D temp(Point2D(rectangle.position - rectangle.halfExtents), rectangle.halfExtents * 2.0f);
-	Interval2D result;
-	vec2 min = GetMin(temp);
-	vec2 max = GetMax(temp);
-	vec2 verts[] = { vec2(min.x, min.y), vec2(min.x, max.y), vec2(max.x, max.y), vec2(max.x, min.y) };
+Interval2D GetInterval(const OrientedRectangle& rectangle, const vec2& axis) noexcept {
+	vec2 c = rectangle.position;
+	vec2 h = rectangle.halfExtents;
+	vec2 verts[4] = {
+		vec2(-h.x, -h.y),
+		vec2(h.x, -h.y),
+		vec2(h.x,  h.y),
+		vec2(-h.x,  h.y)
+	};
 	float theta = DEG2RAD(rectangle.rotation);
-	float zRotation[] = { cosf(theta), sinf(theta), -sinf(theta), cosf(theta) };
+	float zRotation[] = { std::cos(theta), std::sin(theta), -std::sin(theta), std::cos(theta) };
 	for (int i = 0; i < 4; i++) {
-		vec2 r = verts[i] - rectangle.position;
 		vec2 rotated;
-		Multiply(rotated.asArray, r.asArray, 1, 2, zRotation, 2, 2);
-		verts[i] = rotated + rectangle.position;
+		Multiply(rotated.asArray, verts[i].asArray, 1, 2, zRotation, 2, 2);
+		verts[i] = rotated + c;
 	}
+	Interval2D result;
 	result.min = result.max = Dot(axis, verts[0]);
 	for (int i = 1; i < 4; i++) {
 		float projection = Dot(axis, verts[i]);
-		if (projection < result.min) {
-			result.min = projection;
-		}
-		if (projection > result.max) {
-			result.max = projection;
-		}
+		if (projection < result.min) result.min = projection;
+		if (projection > result.max) result.max = projection;
 	}
 	return result;
 }
-bool OverlapOnAxis(const Rectangle2D& rect1, const OrientedRectangle& rect2, const vec2& axis) {
+bool OverlapOnAxis(const Rectangle2D& rect1, const OrientedRectangle& rect2, const vec2& axis) noexcept {
 	Interval2D a = GetInterval(rect1, axis);
 	Interval2D b = GetInterval(rect2, axis);
 	return ((b.min <= a.max) && (a.min <= b.max));
 }
-bool RectangleOrientedRectangle(const Rectangle2D& rect1, const OrientedRectangle rect2) {
+bool RectangleOrientedRectangle(const Rectangle2D& rect1, const OrientedRectangle rect2) noexcept {
 	vec2 axisToTest[] = { vec2(1, 0), vec2(0, 1), vec2(), vec2() };
 	float theta = DEG2RAD(rect2.rotation);
-	float zRotaion[] = { cosf(theta), sinf(theta), -sinf(theta), cosf(theta) };
+	float zRotaion[] = { std::cos(theta), std::sin(theta), -std::sin(theta), std::cos(theta) };
 	vec2 axis = Normalized(vec2(rect2.halfExtents.x, 0));
 	Multiply(axisToTest[2].asArray, axis.asArray, 1, 2, zRotaion, 2, 2);
 	axis = Normalized(vec2(0, rect2.halfExtents.y));
@@ -214,25 +214,26 @@ bool RectangleOrientedRectangle(const Rectangle2D& rect1, const OrientedRectangl
 	return true;
 }
 
-bool OverlapOnAxis(const OrientedRectangle& rect1, const OrientedRectangle& rect2, const vec2& axis) {
+bool OverlapOnAxis(const OrientedRectangle& rect1, const OrientedRectangle& rect2, const vec2& axis) noexcept {
 	Interval2D a = GetInterval(rect1, axis);
 	Interval2D b = GetInterval(rect2, axis);
 	return ((b.min <= a.max) && (a.min <= b.max));
 }
-bool RectangleOrientedRectangle(const OrientedRectangle& rect1, const OrientedRectangle& rect2) {
-	vec2 axisToTest[] = { vec2(), vec2(), vec2(), vec2() };
+bool RectangleOrientedRectangle(const OrientedRectangle& rect1, const OrientedRectangle& rect2) noexcept {
+	vec2 axisToTest[4];
 	float theta1 = DEG2RAD(rect1.rotation);
 	float theta2 = DEG2RAD(rect2.rotation);
-	float zRotaion1[] = { cosf(theta1), sinf(theta1), -sinf(theta1), cosf(theta1) };
-	float zRotaion2[] = { cosf(theta2), sinf(theta2), -sinf(theta2), cosf(theta2) };
-	vec2 axis = Normalized(vec2(rect1.halfExtents.x, 0));
-	Multiply(axisToTest[0].asArray, axis.asArray, 1, 2, zRotaion1, 2, 2);
-	axis = Normalized(vec2(0, rect1.halfExtents.y));
-	Multiply(axisToTest[1].asArray, axis.asArray, 1, 2, zRotaion1, 2, 2);
-	axis = Normalized(vec2(rect2.halfExtents.x, 0));
-	Multiply(axisToTest[2].asArray, axis.asArray, 1, 2, zRotaion2, 2, 2);
-	axis = Normalized(vec2(0, rect2.halfExtents.y));
-	Multiply(axisToTest[3].asArray, axis.asArray, 1, 2, zRotaion2, 2, 2);
+	float zRot1[] = { std::cos(theta1), std::sin(theta1), -std::sin(theta1), std::cos(theta1) };
+	float zRot2[] = { std::cos(theta2), std::sin(theta2), -std::sin(theta2), std::cos(theta2) };
+	vec2 axis;
+	axis = Normalized(vec2(1, 0));
+	Multiply(axisToTest[0].asArray, axis.asArray, 1, 2, zRot1, 2, 2);
+	axis = Normalized(vec2(0, 1));
+	Multiply(axisToTest[1].asArray, axis.asArray, 1, 2, zRot1, 2, 2);
+	axis = Normalized(vec2(1, 0));
+	Multiply(axisToTest[2].asArray, axis.asArray, 1, 2, zRot2, 2, 2);
+	axis = Normalized(vec2(0, 1));
+	Multiply(axisToTest[3].asArray, axis.asArray, 1, 2, zRot2, 2, 2);
 	for (int i = 0; i < 4; i++) {
 		if (!OverlapOnAxis(rect1, rect2, axisToTest[i])) {
 			return false;

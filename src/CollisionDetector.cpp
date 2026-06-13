@@ -4,158 +4,208 @@
 
 namespace elysian {
 
-CollisionDetector::CollisionDetector() {
+    std::unique_ptr<CollisionInfo> CollisionDetector::Detect(Collider2D* a, Collider2D* b) noexcept {
+        if (!a->rigidbody || !b->rigidbody) return nullptr;
+        if (!a->rigidbody->inverseMass && !b->rigidbody->inverseMass) return nullptr;
 
-}
+        CircleCollider* ca = dynamic_cast<CircleCollider*>(a);
+        CircleCollider* cb = dynamic_cast<CircleCollider*>(b);
+        if (ca && cb) return CircleVsCircle(ca, cb);
 
-CollisionInfo* CollisionDetector::Detect(Collider2D* a, Collider2D* b) {
-    if (!a->rigidbody || !b->rigidbody) return nullptr;
-    if (!a->rigidbody->inverseMass && !b->rigidbody->inverseMass) return nullptr;
+        BoxCollider* ba = dynamic_cast<BoxCollider*>(a);
+        BoxCollider* bb = dynamic_cast<BoxCollider*>(b);
+        if (ba && bb) return BoxVsBox(ba, bb);
 
-    CircleCollider* ca = dynamic_cast<CircleCollider*>(a);
-    CircleCollider* cb = dynamic_cast<CircleCollider*>(b);
-    if (ca && cb) return CircleVsCircle(ca, cb);
+        CircleCollider* c = dynamic_cast<CircleCollider*>(a);
+        BoxCollider* box = dynamic_cast<BoxCollider*>(b);
+        if (c && box) return CircleVsBox(c, box);
 
-    BoxCollider* ba = dynamic_cast<BoxCollider*>(a);
-    BoxCollider* bb = dynamic_cast<BoxCollider*>(b);
-    if (ba && bb) return BoxVsBox(ba, bb);
+        CircleCollider* c2 = dynamic_cast<CircleCollider*>(b);
+        BoxCollider* box2 = dynamic_cast<BoxCollider*>(a);
+        if (c2 && box2) return CircleVsBox(c2, box2);
 
-    CircleCollider* c = dynamic_cast<CircleCollider*>(a);
-    BoxCollider* box = dynamic_cast<BoxCollider*>(b);
-    if (c && box) return CircleVsBox(c, box);
+        return nullptr;
+    }
 
-    CircleCollider* c2 = dynamic_cast<CircleCollider*>(b);
-    BoxCollider* box2 = dynamic_cast<BoxCollider*>(a);
-    if (c2 && box2) return CircleVsBox(c2, box2);
+    std::unique_ptr<CollisionInfo> CollisionDetector::CircleVsCircle(CircleCollider* a, CircleCollider* b) noexcept {
+        Circle& c1 = *a->circle;
+        Circle& c2 = *b->circle;
 
-    return nullptr;
-}
+        vec2 diff = c2.Position - c1.Position;
+        float distSqr = Magnitudesqr(diff);
+        float radiusSum = c1.radius + c2.radius;
 
-CollisionInfo* CollisionDetector::CircleVsCircle(CircleCollider* a, CircleCollider* b) {
-    Circle& c1 = *a->circle;
-    Circle& c2 = *b->circle;
+        if (distSqr >= radiusSum * radiusSum) return nullptr;
 
-    vec2 diff = c2.Position - c1.Position;
-    float distSqr = Magnitudesqr(diff);
-    float radiusSum = c1.radius + c2.radius;
+        float distance = std::sqrt(distSqr);
 
-    if (distSqr >= radiusSum * radiusSum) return nullptr;
+        auto info = std::make_unique<CollisionInfo>(a, b, a->rigidbody, b->rigidbody);
+        info->normal = (distance != 0) ? Normalized(diff) : vec2(1, 0);
+        info->penetrationDepth = radiusSum - distance;
+        info->collisionPoint = c1.Position + info->normal * c1.radius;
+        info->hasCollision = true;
+        return info;
+    }
 
-    float distance = sqrtf(distSqr);
-
-    CollisionInfo* info = new CollisionInfo(*a, *b, *a->rigidbody, *b->rigidbody);
-    info->normal = (distance != 0) ? Normalized(diff) : vec2(1, 0);
-    info->penetrationDepth = radiusSum - distance;
-    info->collisionPoint = c1.Position + info->normal * c1.radius;
-    info->hasCollision = true;
-    return info;
-}
-
-CollisionInfo* CollisionDetector::BoxVsBox(BoxCollider* a, BoxCollider* b) {
-    OrientedRectangle& r1 = *a->rectangle;
-    OrientedRectangle& r2 = *b->rectangle;
-
-    // Same axes as your RectangleOrientedRectangle(OrientedRectangle, OrientedRectangle)
-    float theta1 = DEG2RAD(r1.rotation);
-    float theta2 = DEG2RAD(r2.rotation);
-    float zRot1[] = { cosf(theta1), sinf(theta1), -sinf(theta1), cosf(theta1) };
-    float zRot2[] = { cosf(theta2), sinf(theta2), -sinf(theta2), cosf(theta2) };
-
-    vec2 axisToTest[4];
-    vec2 axis;
-
-    axis = Normalized(vec2(r1.halfExtents.x, 0));
-    Multiply(axisToTest[0].asArray, axis.asArray, 1, 2, zRot1, 2, 2);
-
-    axis = Normalized(vec2(0, r1.halfExtents.y));
-    Multiply(axisToTest[1].asArray, axis.asArray, 1, 2, zRot1, 2, 2);
-
-    axis = Normalized(vec2(r2.halfExtents.x, 0));
-    Multiply(axisToTest[2].asArray, axis.asArray, 1, 2, zRot2, 2, 2);
-
-    axis = Normalized(vec2(0, r2.halfExtents.y));
-    Multiply(axisToTest[3].asArray, axis.asArray, 1, 2, zRot2, 2, 2);
-
-    // Find minimum overlap axis (same as SAT but track depth)
-    float minDepth = FLT_MAX;
-    vec2  minAxis;
-
-    for (int i = 0; i < 4; i++) {
-        Interval2D intervalA = GetInterval(r1, axisToTest[i]);
-        Interval2D intervalB = GetInterval(r2, axisToTest[i]);
-
-        if (!(intervalB.min <= intervalA.max && intervalA.min <= intervalB.max))
-            return nullptr; // separating axis found
-
-        float overlap = fminf(intervalA.max, intervalB.max)
-            - fmaxf(intervalA.min, intervalB.min);
-        if (overlap < minDepth) {
-            minDepth = overlap;
-            minAxis = axisToTest[i];
+    static void GetWorldVerts(const OrientedRectangle& r, vec2 out[4]) {
+        float theta = DEG2RAD(r.rotation);
+        float zRot[] = { std::cos(theta), std::sin(theta), -std::sin(theta), std::cos(theta) };
+        vec2 local[4] = {
+            vec2(-r.halfExtents.x, -r.halfExtents.y),
+            vec2(r.halfExtents.x, -r.halfExtents.y),
+            vec2(r.halfExtents.x,  r.halfExtents.y),
+            vec2(-r.halfExtents.x,  r.halfExtents.y)
+        };
+        for (int i = 0; i < 4; i++) {
+            Multiply(out[i].asArray, local[i].asArray, 1, 2, zRot, 2, 2);
+            out[i] = out[i] + r.position;
         }
     }
 
-    // Make sure normal points from a to b
-    vec2 diff = r2.position - r1.position;
-    if (Dot(diff, minAxis) < 0) minAxis = minAxis * -1.0f;
+    std::unique_ptr<CollisionInfo> CollisionDetector::BoxVsBox(BoxCollider* a, BoxCollider* b) noexcept {
+        OrientedRectangle& r1 = *a->rectangle;
+        OrientedRectangle& r2 = *b->rectangle;
 
-    CollisionInfo* info = new CollisionInfo(*a, *b, *a->rigidbody, *b->rigidbody);
-    info->normal = minAxis;
-    info->penetrationDepth = minDepth;
-    info->collisionPoint = r1.position + minAxis * minDepth;
-    info->hasCollision = true;
-    return info;
-}
+        float theta1 = DEG2RAD(r1.rotation);
+        float theta2 = DEG2RAD(r2.rotation);
+        float zRot1[] = { std::cos(theta1), std::sin(theta1), -std::sin(theta1), std::cos(theta1) };
+        float zRot2[] = { std::cos(theta2), std::sin(theta2), -std::sin(theta2), std::cos(theta2) };
 
-CollisionInfo* CollisionDetector::CircleVsBox(CircleCollider* circle, BoxCollider* box) {
-    OrientedRectangle& rect = *box->rectangle;
-    Circle& c = *circle->circle;
+        vec2 axisToTest[4];
+        vec2 axis;
 
-    // Same local space transform as your CircleOrientedRectangle()
-    vec2 rotVector = c.Position - rect.position;
-    float theta = -DEG2RAD(rect.rotation);
-    float zRot[] = { cosf(theta), sinf(theta), -sinf(theta), cosf(theta) };
-    Multiply(rotVector.asArray, vec2(rotVector.x, rotVector.y).asArray, 1, 2, zRot, 2, 2);
+        axis = Normalized(vec2(1, 0));
+        Multiply(axisToTest[0].asArray, axis.asArray, 1, 2, zRot1, 2, 2);
 
-    // Local space circle and rect (same as your implementation)
-    vec2 localCenter = rotVector + rect.halfExtents;
-    Rectangle2D localRect(Point2D(), rect.halfExtents * 2.0f);
+        axis = Normalized(vec2(0, 1));
+        Multiply(axisToTest[1].asArray, axis.asArray, 1, 2, zRot1, 2, 2);
 
-    vec2 min = GetMin(localRect);
-    vec2 max = GetMax(localRect);
+        axis = Normalized(vec2(1, 0));
+        Multiply(axisToTest[2].asArray, axis.asArray, 1, 2, zRot2, 2, 2);
 
-    vec2 closest = localCenter;
-    CLAMP(closest.x, min.x, max.x);
-    CLAMP(closest.y, min.y, max.y);
+        axis = Normalized(vec2(0, 1));
+        Multiply(axisToTest[3].asArray, axis.asArray, 1, 2, zRot2, 2, 2);
 
-    vec2  toCircle = localCenter - closest;
-    float distSqr = LengthSqr(Line2D(localCenter, closest));
+        float minDepth = FLT_MAX;
+        vec2  minAxis;
 
-    if (distSqr > c.radius * c.radius) return nullptr;
+        for (int i = 0; i < 4; i++) {
+            Interval2D intervalA = GetInterval(r1, axisToTest[i]);
+            Interval2D intervalB = GetInterval(r2, axisToTest[i]);
 
-    float distance = sqrtf(distSqr);
+            if (!(intervalB.min <= intervalA.max && intervalA.min <= intervalB.max))
+                return nullptr;
 
-    // Local space normal
-    vec2 localNormal = (distance != 0) ? Normalized(toCircle) : vec2(1, 0);
+            float overlap = fminf(intervalA.max, intervalB.max)
+                - fmaxf(intervalA.min, intervalB.min);
+            if (overlap < minDepth) {
+                minDepth = overlap;
+                minAxis = axisToTest[i];
+            }
+        }
 
-    // Rotate normal back to world space
-    float thetaBack = DEG2RAD(rect.rotation);
-    float zRotBack[] = { cosf(thetaBack), sinf(thetaBack), -sinf(thetaBack), cosf(thetaBack) };
-    vec2 worldNormal;
-    Multiply(worldNormal.asArray, localNormal.asArray, 1, 2, zRotBack, 2, 2);
+        vec2 diff = r2.position - r1.position;
+        if (Dot(diff, minAxis) < 0) minAxis = minAxis * -1.0f;
 
-    // Contact point is the closest point in world space
-    vec2 localContact = closest - rect.halfExtents; // undo the offset
-    vec2 worldContact;
-    Multiply(worldContact.asArray, localContact.asArray, 1, 2, zRotBack, 2, 2);
-    worldContact = worldContact + rect.position;
+        vec2 verts2[4];
+        GetWorldVerts(r2, verts2);
 
-    CollisionInfo* info = new CollisionInfo(*circle, *box, *circle->rigidbody, *box->rigidbody);
-    info->normal = worldNormal;
-    info->penetrationDepth = c.radius - distance;
-    info->collisionPoint = worldContact;
-    info->hasCollision = true;
-    return info;
-}
+        float deepest = FLT_MAX;
+        for (int i = 0; i < 4; i++) {
+            float p = Dot(verts2[i], minAxis);
+            if (p < deepest) deepest = p;
+        }
+
+        const float tolerance = 0.5f;
+        vec2 contactSum(0, 0);
+        int  contactCount = 0;
+        for (int i = 0; i < 4; i++) {
+            float p = Dot(verts2[i], minAxis);
+            if (p <= deepest + tolerance) {
+                contactSum = contactSum + verts2[i];
+                contactCount++;
+            }
+        }
+
+        vec2 contactPoint = contactSum * (1.0f / (float)contactCount);
+
+        auto info = std::make_unique<CollisionInfo>(a, b, a->rigidbody, b->rigidbody);
+        info->normal = minAxis;
+        info->penetrationDepth = minDepth;
+        info->collisionPoint = contactPoint;
+        info->hasCollision = true;
+        return info;
+    }
+
+    std::unique_ptr<CollisionInfo> CollisionDetector::CircleVsBox(CircleCollider* circle, BoxCollider* box) noexcept {
+        OrientedRectangle& rect = *box->rectangle;
+        Circle& c = *circle->circle;
+
+        vec2 rotVector = c.Position - rect.position;
+        float theta = DEG2RAD(rect.rotation);
+        float zRot[] = { std::cos(theta), -std::sin(theta), std::sin(theta), std::cos(theta) };
+        Multiply(rotVector.asArray, vec2(rotVector.x, rotVector.y).asArray, 1, 2, zRot, 2, 2);
+
+        vec2 localCenter = rotVector + rect.halfExtents;
+        Rectangle2D localRect(Point2D(), rect.halfExtents * 2.0f);
+
+        vec2 min = GetMin(localRect);
+        vec2 max = GetMax(localRect);
+
+        vec2 closest = localCenter;
+        CLAMP(closest.x, min.x, max.x);
+        CLAMP(closest.y, min.y, max.y);
+
+        vec2  toCircle = localCenter - closest;
+        float distSqr = Magnitudesqr(toCircle);
+
+        if (distSqr > c.radius * c.radius) return nullptr;
+
+        float distance = std::sqrt(distSqr);
+        bool circleInsideBox = (distance == 0);
+
+        vec2 localNormal;
+        if (!circleInsideBox) {
+            localNormal = Normalized(toCircle);
+        }
+        else {
+            float dx = fminf(localCenter.x - min.x, max.x - localCenter.x);
+            float dy = fminf(localCenter.y - min.y, max.y - localCenter.y);
+            if (dx < dy) {
+                localNormal = vec2(localCenter.x < (min.x + max.x) * 0.5f ? -1.0f : 1.0f, 0);
+                closest.x = (localNormal.x < 0) ? min.x : max.x;
+            }
+            else {
+                localNormal = vec2(0, localCenter.y < (min.y + max.y) * 0.5f ? -1.0f : 1.0f);
+                closest.y = (localNormal.y < 0) ? min.y : max.y;
+            }
+        }
+
+        float thetaBack = DEG2RAD(rect.rotation);
+        float zRotBack[] = { std::cos(thetaBack), std::sin(thetaBack), -std::sin(thetaBack), std::cos(thetaBack) };
+        vec2 worldNormal;
+        Multiply(worldNormal.asArray, localNormal.asArray, 1, 2, zRotBack, 2, 2);
+
+        vec2 localContact = closest - rect.halfExtents;
+        vec2 worldContact;
+        Multiply(worldContact.asArray, localContact.asArray, 1, 2, zRotBack, 2, 2);
+        worldContact = worldContact + rect.position;
+
+        auto info = std::make_unique<CollisionInfo>(circle, box, circle->rigidbody, box->rigidbody);
+
+        if (!circleInsideBox) {
+            info->normal = worldNormal * -1.0f;
+            info->penetrationDepth = c.radius - distance;
+        }
+        else {
+            info->normal = worldNormal;
+            float embeddedDist = Magnitude(vec2(closest.x - localCenter.x, closest.y - localCenter.y));
+            info->penetrationDepth = c.radius + embeddedDist;
+        }
+
+        info->collisionPoint = worldContact;
+        info->hasCollision = true;
+        return info;
+    }
 
 } // namespace elysian

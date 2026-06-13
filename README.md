@@ -15,7 +15,7 @@ A 2D rigidbody physics engine with collision detection and resolution, written i
 ## Dependencies
 
 - **C++20** compiler (MSVC 2022+, GCC 11+, Clang 14+)
-- **SFML 3.x** — Graphics, Window, System components
+- No external dependencies
 
 ## Building
 
@@ -26,20 +26,16 @@ cmake -B build
 cmake --build build
 ```
 
-Optional: build and run the demo application:
+Run tests:
 
 ```bash
-# built as part of cmake --build
-./build/Demo.exe
+ctest --test-dir build
 ```
 
 ## Quick Start
 
 ```cpp
-#include "PhysicsSystem.h"
-#include "Collider2D.h"
-#include "Rigidbody.h"
-#include "Geometry2D.h"
+#include "PhysicsEngine/PhysicsEngine.h"
 
 using namespace elysian;
 
@@ -53,7 +49,7 @@ ground.inverseMass = 0.0f;
 ground.isGravityOn = false;
 
 OrientedRectangle groundRect(vec2(400, 590), vec2(400, 20), 0.0f);
-BoxCollider groundCollider(&groundRect, ground.transform);
+BoxCollider groundCollider(&groundRect, &ground.transform);
 groundCollider.rigidbody = &ground;
 
 physics.AddRigidbody(&ground);
@@ -64,7 +60,7 @@ Rigidbody ball(vec2(400, 100), 0.0f, vec2(1, 1));
 ball.bounciness = 0.5f;
 
 Circle ballCircle(vec2(400, 100), 25.0f);
-CircleCollider ballCollider(&ballCircle, ball.transform);
+CircleCollider ballCollider(&ballCircle, &ball.transform);
 ballCollider.rigidbody = &ball;
 
 physics.AddRigidbody(&ball);
@@ -98,7 +94,7 @@ All types live in the `elysian` namespace.
 | `OrientedRectangle` | OBB with position, halfExtents, rotation |
 | `Interval2D` | 1D interval (min/max) for SAT |
 
-Intersection tests: `PointInCircle`, `PointInRectangle`, `CircleCircle`, `CircleRectangle`, `RectangleRectangleSaT`, and oriented variants.
+Intersection tests: `PointInCircle`, `PointInRectangle`, `CircleCircle`, `CircleRectangle`, `RectangleRectangleSAT`, and oriented variants.
 
 ### Rigidbody (`Rigidbody.h`)
 
@@ -149,19 +145,28 @@ Intersection tests: `PointInCircle`, `PointInRectangle`, `CircleCircle`, `Circle
 ## File Structure
 
 ```
-src/
-├── vectors.h / .cpp          — 2D/3D vector math
-├── matrices.h / .cpp         — 2x2, 3x3, 4x4 matrix math
-├── Geometry2D.h / .cpp       — 2D shapes and intersection tests
-├── ShapeTypes.h              — Shape enum (circle, box)
-├── Transform.h / .cpp        — Position, rotation, scale
-├── Rigidbody.h / .cpp        — Rigidbody dynamics
-├── Collider2D.h / .cpp       — Collider base and derived types
-├── CollisionInfo.h / .cpp    — Collision data carrier
-├── CollisionDetector.h / .cpp— Collision detection
-├── CollisionResolver.h / .cpp— Impulse-based resolution
-└── PhysicsSystem.h / .cpp    — System orchestrator
+include/
+├── PhysicsEngine/
+│   ├── PhysicsEngine.h     — Single include header
+│   ├── Export.h            — DLL export/import macros
+│   └── Version.h           — Version macros
+├── vectors.h / .cpp           — 2D/3D vector math
+├── matrices.h / .cpp          — 2x2, 3x3, 4x4 matrix math
+├── Geometry2D.h / .cpp        — 2D shapes and intersection tests
+├── ShapeTypes.h               — Shape enum (circle, box)
+├── Transform.h / .cpp         — Position, rotation, scale
+├── Rigidbody.h / .cpp         — Rigidbody dynamics
+├── Collider2D.h / .cpp        — Collider base and derived types
+├── CollisionInfo.h / .cpp     — Collision data carrier
+├── CollisionDetector.h / .cpp — Collision detection
+├── CollisionResolver.h / .cpp — Impulse-based resolution
+└── PhysicsSystem.h / .cpp     — System orchestrator
 ```
+
+## Demo Application
+
+A separate demo application with SFML rendering is available at:
+**[Elysian Physics Demo](https://github.com/your-username/elysian-physics-demo)** (placeholder — link to your demo repo)
 
 ## License
 
