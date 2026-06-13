@@ -16,7 +16,7 @@ namespace elysian {
 
 		float velocityAlongNormal = Dot(relativeVelocity, info.normal);
 
-		const float restitutionThreshold = 30.0f;
+		const float restitutionThreshold = 1.0f;
 		float restitution = (std::abs(velocityAlongNormal) < restitutionThreshold)
 			? 0.0f
 			: fminf(rbA.bounciness, rbB.bounciness);
@@ -29,8 +29,8 @@ namespace elysian {
 			float rBCrossN = rB.x * info.normal.y - rB.y * info.normal.x;
 
 			float invMassSum = rbA.inverseMass + rbB.inverseMass;
-			float angularTermA = (rACrossN * rACrossN) / moiA;
-			float angularTermB = (rBCrossN * rBCrossN) / moiB;
+			float angularTermA = (rbA.inverseMass > 0.0f) ? (rACrossN * rACrossN) / moiA : 0.0f;
+			float angularTermB = (rbB.inverseMass > 0.0f) ? (rBCrossN * rBCrossN) / moiB : 0.0f;
 
 			float impulseScalar = -(1.0f + restitution) * velocityAlongNormal;
 			impulseScalar /= (invMassSum + angularTermA + angularTermB);
