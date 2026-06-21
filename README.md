@@ -17,6 +17,29 @@ A 2D rigidbody physics engine with collision detection and resolution, written i
 - **C++20** compiler (MSVC 2022+, GCC 11+, Clang 14+)
 - No external dependencies
 
+## Version
+
+The build system generates `PhysicsEngine/Version.h` from `include/PhysicsEngine/Version.h.in` using CMake. This header is included by `PhysicsEngine/PhysicsEngine.h`, so after building you can read the library version at runtime.
+
+Available macros:
+
+- `PHYSICSENGINE_VERSION`
+- `PHYSICSENGINE_VERSION_MAJOR`
+- `PHYSICSENGINE_VERSION_MINOR`
+- `PHYSICSENGINE_VERSION_PATCH`
+
+Example:
+
+```cpp
+#include <iostream>
+#include "PhysicsEngine/PhysicsEngine.h"
+
+int main() {
+    std::cout << "Elysian Physics Engine " << PHYSICSENGINE_VERSION << "\n";
+    return 0;
+}
+```
+
 ## Building
 
 ```bash
